@@ -11,7 +11,6 @@ package org.mindpirates.video.subs
 	import flash.text.Font;
 	import flash.utils.Timer;
 	
-	import org.mindpirates.video.FlashVars;
 	import org.mindpirates.video.VideoPlayer;
 	import org.mindpirates.video.VideoServices;
 	import org.mindpirates.video.events.SubtitleListEvent;

@@ -1,7 +1,7 @@
 package org.mindpirates.video.subs.lines
 {
 
-	import com.chewtinfoil.utils.StringUtils;
+	import utils.StringUtils;
 	
 	import flash.system.System;
 	 

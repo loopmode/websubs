@@ -1,5 +1,7 @@
-package org.mindpirates.video
+package org.mindpirates.video.subs
 {
+	import org.mindpirates.video.VideoServices;
+
 	/**
 	 * This class gives named and casted access to parameters passed from the HTML page.
 	 */

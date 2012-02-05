@@ -5,7 +5,7 @@ package org.mindpirates.video.subs.loading
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	
-	import nl.inlet42.data.subtitles.SubtitleParser;
+	import subtitles.SubtitleParser;
 	import org.mindpirates.video.subs.SubtitleFormats;
 	import org.mindpirates.video.subs.lines.SubtitlesLines;
 	

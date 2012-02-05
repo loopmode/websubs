@@ -1,4 +1,4 @@
-package nl.inlet42.data.subtitles {
+package subtitles {
 	import org.mindpirates.video.subs.lines.SubtitleLine;
 	
 	/**

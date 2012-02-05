@@ -10,7 +10,6 @@ package org.mindpirates.video.subs
 	import org.mindpirates.video.events.VideoPlayerEvent;
 	import org.mindpirates.video.vimeo.VimeoAuth;
 	import org.mindpirates.video.vimeo.VimeoPlayer;
-	import org.mindpirates.video.FlashVars;
 	import org.mindpirates.video.VideoPlayer;
 	import org.mindpirates.video.VideoServices;
 	

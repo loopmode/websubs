@@ -1,6 +1,6 @@
 package org.mindpirates.video.subs.lines { 
-	import com.chewtinfoil.utils.StringUtils;
-	import nl.inlet42.data.subtitles.SubtitleParser;
+	import utils.StringUtils;
+	import subtitles.SubtitleParser;
 	
 	
 	/**

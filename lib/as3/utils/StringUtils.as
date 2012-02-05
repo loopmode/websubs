@@ -1,4 +1,4 @@
-package com.chewtinfoil.utils {
+package utils {
 	
 	/**
 	 * 	String Utilities class by Ryan Matsikas, Feb 10 2006
