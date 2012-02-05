@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>ProblemaPlayer</title>
+		<link rel="stylesheet" type="text/css" media="screen" href="media/css/style.css" />
+		<script type="text/javascript" src="media/js/jquery.min.js"></script>
+		<script type="text/javascript" src="media/js/swfobject.js"></script>
+		<!--[if IE]>
+			<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		
+		<style type="text/css">
+			#myContent {
+				width: 640px;
+				height: 360px;
+				background: black;
+			}
+		</style>
+		
+		<script type="text/javascript">
+		
+			var flashvars = {
+					video_id: 17712557,
+					subtitles_list: 'media/srt/subtitles.xml'
+				},
+				params = {allowFullScreen: true, allowScriptAccess: 'always', wmode: 'transparent'},
+				attributes = {};
+				
+			swfobject.embedSWF("media/swf/VimeoSubtitlePlayer.swf", "myContent", "640", "360", "11.1.0", "expressInstall.swf", flashvars, params, attributes);
+			
+		</script>
+		
+	</head>
+	<body>
+		<div id="myContent">
+			<h1>Flash Player required</h1>
+			<p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" /></a></p>
+		</div>
+	</body>
+</html>
