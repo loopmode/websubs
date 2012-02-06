@@ -4,4 +4,3 @@ AS3 wrapper for the Moogaloop videoplayer from www.vimeo.com with advanced subti
  
 Currently, only vimeo.com and SRT subtitles are supported. 
 Youtube and other subtitle formats will be implemented in the future.
- 
