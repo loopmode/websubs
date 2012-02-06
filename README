@@ -1,3 +1,6 @@
-Websubs - subtitles for vimeo and youtube
-
-Testing GIT
+<h3>Websubs</h3>
+<p>
+AS3 wrapper for the Moogaloop videoplayer from www.vimeo.com with advanced subtitles support.<br>
+<br>
+Currently,only vimeo.com and SRT subtitles are supported. Youtube and other subtitle formats will be implemented in future.
+</p>
