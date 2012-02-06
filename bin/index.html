@@ -22,9 +22,10 @@
 		
 			var flashvars = {
 					video_id: 17712557,
-					subtitles_list: 'media/srt/subtitles.xml'
+					subtitles_list: 'media/srt/subtitles.xml',
+					subtitles: 'test'
 				},
-				params = {allowFullScreen: true, allowScriptAccess: 'always', wmode: 'transparent'},
+				params = {allowFullScreen: true, allowScriptAccess: 'always', wmode: 'window'},
 				attributes = {};
 				
 			swfobject.embedSWF("media/swf/VimeoSubtitlePlayer.swf", "myContent", "640", "360", "11.1.0", "expressInstall.swf", flashvars, params, attributes);

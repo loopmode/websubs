@@ -7,17 +7,15 @@ package org.mindpirates.video.subs
 	
 	import net.stevensacks.preloaders.CircleSlicePreloader;
 	
+	import org.mindpirates.video.VideoPlayerBase;
 	import org.mindpirates.video.events.VideoPlayerEvent;
 	import org.mindpirates.video.vimeo.VimeoAuth;
 	import org.mindpirates.video.vimeo.VimeoPlayer;
-	import org.mindpirates.video.VideoPlayer;
-	import org.mindpirates.video.VideoServices;
 	
-	[SWF(width="640", height="360", bgColor="0x000000")]
 	/**
-	 * Wrapper class for vimeo.com videos with support for SRT subtitles.
-	 * Youtube and different subtitle formats are considered.
-	 * @author Jovica Aleksic (jovi@mindpirates.org)
+	 * The <code>SubtitleVideoPlayer</code> class adds subtitle support to a videoplayer class.<br>
+	 * @see #videoPlayer videoPlayer
+	 * @author Jovica Aleksic
 	 */
 	public class SubtitleVideoPlayer extends Sprite
 	{
@@ -29,20 +27,27 @@ package org.mindpirates.video.subs
 		
 		/**
 		 * The VideoPlayer instance.
-		 * @see org.mindpirates.video.VideoPlayer
+		 * @see org.mindpirates.video.VideoPlayerBase
 		 */
-		public var videoPlayer:VideoPlayer;
+		public var videoPlayer:VideoPlayerBase;
 		
 		/**
-		 * The SubtitlesViewer instance.
-		 * @see org.mindpirates.video.srtplayer.SubtitlesViewer
+		 * The Subtitles instance.
+		 * @see org.mindpirates.video.subs.Subtitles
 		 */
-		private var subtitlesViewer:SubtitlesController;
+		private var subs:Subtitles;
 		
 		/**
 		 * The spinner shown while the videoPlayer is loading
 		 */
 		private var spinner:CircleSlicePreloader;
+		
+		/**
+		 * The name of the video service. Must be a value defined in <code>VideoServices</code>.
+		 * @see org.mindpirates.video.subs.VideoServices
+		 */
+		private var _videoServiceName:String;
+		
 		
 		public function SubtitleVideoPlayer()
 		{
@@ -60,6 +65,23 @@ package org.mindpirates.video.subs
 		/*
 		--------------------------------------------------------------------------
 		
+		VIDEO SERVICE
+		
+		--------------------------------------------------------------------------
+		*/
+		
+		public function setVideoService(name:String):void
+		{
+			_videoServiceName = name;
+		}
+		public function get videoServiceName():String
+		{
+			return _videoServiceName;
+		}
+		
+		/*
+		--------------------------------------------------------------------------
+		
 			EVENT LISTENERS
 		
 		--------------------------------------------------------------------------
@@ -70,7 +92,7 @@ package org.mindpirates.video.subs
 			setupStage();
 			showSpinner();
 			createPlayer();
-			createSubtitlesViewer();
+			createSubtitles();
 			addListeners();
 		}
 			
@@ -128,13 +150,12 @@ package org.mindpirates.video.subs
 		 */
 		public function createPlayer():void
 		{  
-			// videoPlayer must be created in derived class
-			videoPlayer.addEventListener(VideoPlayerEvent.PLAYER_READY, handlePlayerReady); 
+			// videoPlayer must be created in derived class 
 		}
 		 
 		
 		protected function handlePlayerReady(event:Event):void
-		{
+		{ 
 			videoPlayer.removeEventListener(VideoPlayerEvent.PLAYER_READY, handlePlayerReady);
 			hideSpinner();
 		}
@@ -145,7 +166,7 @@ package org.mindpirates.video.subs
 			removeChild(videoPlayer.displayObject);
 			videoPlayer = null;
 		}	
-		
+		  
 		
 		/*
 		--------------------------------------------------------------------------
@@ -155,16 +176,15 @@ package org.mindpirates.video.subs
 		--------------------------------------------------------------------------
 		*/
 		
-		private function createSubtitlesViewer():void
+		private function createSubtitles():void
 		{
-			 subtitlesViewer = new SubtitlesController(flashVars);
-			 subtitlesViewer.setVideoPlayer( videoPlayer );
+			 subs = new Subtitles(this);
 		}
 		
 		private function destroySubtitlesViewer():void
 		{
-			subtitlesViewer.destroy();
-			subtitlesViewer = null;
+			subs.destroy();
+			subs = null;
 		}
 		
 		

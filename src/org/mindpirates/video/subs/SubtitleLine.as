@@ -1,12 +1,11 @@
-package org.mindpirates.video.subs.lines { 
+package org.mindpirates.video.subs { 
 	import utils.StringUtils;
-	import subtitles.SubtitleParser;
 	
 	
 	/**
-	 *	@author Jovica Aleksic
+	 * Represents a line in the subtitle file.<br>
+	 * @author Jovica Aleksic
 	 */
-
 	public class SubtitleLine {
 		private var _text : String;
 		private var _start : Number; 

@@ -1,5 +1,9 @@
 package org.mindpirates.video.vimeo
 {
+	/**
+	 * This class contains the vimeo developer key in the static constant <code>OAUTH_KEY</code>.
+	 * @see #OAUTH_KEY
+	 */
 	public class VimeoAuth
 	{
 		

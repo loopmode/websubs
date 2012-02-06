@@ -6,9 +6,9 @@ package org.mindpirates.video.subs.view
 	import flash.events.Event;
 	import flash.events.FullScreenEvent;
 	
-	import org.mindpirates.video.VideoPlayer;
+	import org.mindpirates.video.VideoPlayerBase;
 	import org.mindpirates.video.events.VideoPlayerEvent;
-	import org.mindpirates.video.subs.SubtitlesController;
+	import org.mindpirates.video.subs.Subtitles;
 	
 	public class SubtitlesUI extends Sprite
 	{
@@ -21,17 +21,20 @@ package org.mindpirates.video.subs.view
 		 * holds the value for <code>subtitles</code>
 		 * @see #subtitles
 		 */
-		private var _subtitles:SubtitlesController;
+		private var _subs:Subtitles;
 		
-		private var _videoPlayer:VideoPlayer;
+		//private var _videoPlayer:VideoPlayerBase;
 		
-		public function SubtitlesUI(subtitles:SubtitlesController)
+		public function SubtitlesUI(target:Subtitles)
 		{
 			super();
-			
-			_subtitles = subtitles;
-			
+
 			visible = false;
+			
+			_subs = target;
+			
+			//_videoPlayer = subs.main.videoPlayer;
+			subs.main.videoPlayer.addEventListener(VideoPlayerEvent.PLAYER_READY, handlePlayerReady);
 			
 			selectBox = new SubtitlesSelectionCombo();
 			addChild( selectBox );
@@ -55,26 +58,11 @@ package org.mindpirates.video.subs.view
 		 * The <code>Subtitles</code> instance
 		 * @see org.mindpirates.video.subs.Subtitles
 		 */
-		public function get subtitles():SubtitlesController
+		public function get subs():Subtitles
 		{
-			return _subtitles;
+			return _subs;
 		}
-		
-		
-		/**
-		 * Registers the videoplayer and a PLAYER_READY event listener on it.
-		 */ 
-		public function setupVideoPlayer(player:VideoPlayer):void
-		{ 
-			_videoPlayer = player;
-			_videoPlayer.addEventListener(VideoPlayerEvent.PLAYER_READY, handlePlayerReady);
-		}
-		
-		public function get videoPlayer():VideoPlayer
-		{
-			return _videoPlayer;
-		}
-		
+ 
 		/*
 		--------------------------------------------------------------------------
 		
@@ -121,7 +109,7 @@ package org.mindpirates.video.subs.view
 		
 		public function handlePlayerReady(event:Event):void
 		{
-			_videoPlayer.removeEventListener(VideoPlayerEvent.PLAYER_READY, handlePlayerReady);
+			subs.main.videoPlayer.removeEventListener(VideoPlayerEvent.PLAYER_READY, handlePlayerReady);
 			addEventListener(Event.ENTER_FRAME, handleEnterFrame);
 			visible = true;
 			layout();

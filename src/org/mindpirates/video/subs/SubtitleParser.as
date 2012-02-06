@@ -1,5 +1,4 @@
-package subtitles {
-	import org.mindpirates.video.subs.lines.SubtitleLine;
+package org.mindpirates.video.subs {
 	
 	/**
 	 *	@author Jankees.van.Woezik
@@ -9,13 +8,14 @@ package subtitles {
 			var result : Array = new Array();
 			
 			var lines : Array;
-			var translation : SubtitleLine;
+			var subtitleLine : SubtitleLine;
 			
 			var blocks : Array = data.split(/^[0-9]+$/gm);
 			for each (var block : String in blocks) {
-				translation = new SubtitleLine();
+				subtitleLine = new SubtitleLine();
 				lines = block.split('\n');
 				for each (var line : String in lines) { 
+					//trace('parse: '+line);
 					//all lines in a translation block
 					if(trim(line) != "") {
 						if(line.match("-->")) { 
@@ -25,18 +25,24 @@ package subtitles {
 								trace("Translation error, something wrong with the start or end time");							
 							} else {
 								
-								translation.start = stringToSeconds(timecodes[0]);
-								translation.end = stringToSeconds(timecodes[1]);  
+								subtitleLine.start = stringToSeconds(timecodes[0]);
+								subtitleLine.end = stringToSeconds(timecodes[1]);  
 							}
 						} else { 
 							//translation line
-							if(translation.text.length != 0) line = "\n" + trim(line);
-							translation.text += line;
+							if(subtitleLine.text.length != 0) line = "\n" + trim(line);
+							subtitleLine.text += line;
 						}
 					}
 				}
-				result.push(translation);
+				result.push(subtitleLine);
 			}		
+
+			// remove empty first line
+			subtitleLine = result[0];
+			if (subtitleLine.start == 0 && subtitleLine.end == 0 && !subtitleLine.text) {
+				result.shift();
+			}
 			return result;
 		}
 		

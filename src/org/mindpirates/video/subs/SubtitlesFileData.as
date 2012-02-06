@@ -1,4 +1,4 @@
-package org.mindpirates.video.subs.lines
+package org.mindpirates.video.subs
 {
 
 	import utils.StringUtils;
@@ -10,12 +10,12 @@ package org.mindpirates.video.subs.lines
 	/** 
 	 * @author Jovica Aleksic
 	 */
-	public class SubtitlesLines
+	public class SubtitlesFileData
 	{
 		private var _data:Array;
 		private var start_positions:Array;
 		public var url:String;
-		public function SubtitlesLines(data:Array, src:String)
+		public function SubtitlesFileData(data:Array, src:String)
 		{ 
 			_data = data; 
 			url = src;
@@ -24,10 +24,14 @@ package org.mindpirates.video.subs.lines
 		{
 			return _data;
 		}
+		
+		
 		public function getLineAt(index:int):SubtitleLine
 		{
 			return _data[index];
 		}
+		
+		
 		public function getLineIndex(value:SubtitleLine):int
 		{
 			//trace('getLineIndex()', value);
@@ -42,6 +46,7 @@ package org.mindpirates.video.subs.lines
 			return result;
 			
 		}
+		
 		public function getLineIndexByText(value:String):int
 		{
 			var result:int = -1; 
@@ -54,13 +59,23 @@ package org.mindpirates.video.subs.lines
 			}
 			return result;
 		}
+
+		// TODO Specify and document the format of the time argument.
+		/**
+		 * Returns the subtitle line for a given time position.
+		 * @param time 
+		 * @return A <code>SubtitleLine</code> object or null
+		 * @see org.mindpirates.video.subs.SubtitleLine
+		 */
 		public function getLineAtTime(time:Number):SubtitleLine
 		{ 
 			//trace('getLineAtTime('+time+')')
+			time = time/1000;
 			var result:SubtitleLine; 
 			for (var i:int=0,t:int=_data.length; i<t; i++) 
 			{
 				var line:SubtitleLine = _data[i];
+				//trace('line.start: '+line.start+', line.end: '+line.start);
 				if (line.start <= time && line.end >= time) {
 					result = line;
 				}

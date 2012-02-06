@@ -5,9 +5,9 @@ package org.mindpirates.video.subs.loading
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	
-	import subtitles.SubtitleParser;
+	import org.mindpirates.video.subs.SubtitleParser;
 	import org.mindpirates.video.subs.SubtitleFormats;
-	import org.mindpirates.video.subs.lines.SubtitlesLines;
+	import org.mindpirates.video.subs.SubtitlesFileData;
 	
 	/** 
 	 * Dispatched when the subtitle file has been loaded.
@@ -31,7 +31,7 @@ package org.mindpirates.video.subs.loading
 		private var loader:URLLoader;
 		private var _data:Object;
 		private var _isLoaded:Boolean;
-		private var _subtitles:SubtitlesLines;
+		private var _subtitles:SubtitlesFileData;
 		 
 		/** 
 		 * Proxy class for a node of the subtitleList XML file.
@@ -51,11 +51,11 @@ package org.mindpirates.video.subs.loading
 		}
 		
 		/**
-		 * Shortcode for language of the subtitle file.
+		 * Identifier of the subtitle file.
 		 */
-		public function get lang():String
+		public function get id():String
 		{
-			return String(xml.@lang);
+			return String(xml.@id);
 		}
 		
 		/**
@@ -115,6 +115,7 @@ package org.mindpirates.video.subs.loading
 		 */
 		public function load():void
 		{
+			trace(this, 'load()', fileURL);
 			_isLoaded = false;
 			loader = new URLLoader();
 			loader.addEventListener(Event.COMPLETE, handleLoadComplete);
@@ -123,6 +124,7 @@ package org.mindpirates.video.subs.loading
 		
 		protected function handleLoadComplete(event:Event):void
 		{
+			trace(this, 'loaded:', fileURL);
 			_data = event.target.data;
 			loader.removeEventListener(Event.COMPLETE, handleLoadComplete);	
 			_isLoaded = true;
@@ -132,13 +134,13 @@ package org.mindpirates.video.subs.loading
 				case SubtitleFormats.SRT:
 					var lines:Array = SubtitleParser.parseSRT( String(_data) );
 					trace('parsed '+lines.length+' subtitle lines');
-					_subtitles = new SubtitlesLines(lines, fileURL);	
+					_subtitles = new SubtitlesFileData(lines, fileURL);	
 			}
 			
 			dispatchEvent( new Event( Event.COMPLETE ) );
 		}
 		
-		public function get subtitles():SubtitlesLines
+		public function get subtitles():SubtitlesFileData
 		{
 			return _subtitles;
 		}

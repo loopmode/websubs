@@ -1,5 +1,7 @@
 package org.mindpirates.video.subs.view
 {
+	import embed.Fonts;
+	
 	import flash.filters.DropShadowFilter;
 	import flash.filters.GlowFilter;
 	import flash.geom.Matrix;
@@ -9,6 +11,10 @@ package org.mindpirates.video.subs.view
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
+	
+	import org.mindpirates.video.subs.Subtitles;
+	
+	import utils.StringUtils;
 	
 	
 	/** 
@@ -23,21 +29,31 @@ package org.mindpirates.video.subs.view
 		public static var defaultFontSize:Number;
 		
 		/**
+		 * Holds the value for <code>subs</code>
+		 * @see #subs
+		 */
+		private var _subs:Subtitles;
+		
+		/**
 		 * A textfield for displaying subtitles.
 		 * @param config The flashvars passed on from the HTML page
 		 */
-		public function SubtitleTextField(config:Params)
+		public function SubtitleTextField(target:Subtitles)
 		{
 			super();
-			
-			defaultFontName = new Font_DejaVu().fontName;
-			defaultFontSize = config.fontSize;
+			 
+			_subs = target;
+			 
+			defaultFontName = Fonts.DejaVu_Sans;
+			defaultFontSize = subs.main.flashVars.defaultFontSize;
 			
 			_fontName = defaultFontName;
 			_fontSize = defaultFontSize;
-			
+			 
 			var textFormat:TextFormat = new TextFormat();
 			textFormat.align = TextFormatAlign.CENTER; 
+			textFormat.color = 0xFFFFFF;
+			
 			mouseEnabled = false;
 			selectable = false;
 			embedFonts = true;  
@@ -48,19 +64,49 @@ package org.mindpirates.video.subs.view
 			/*
 			border = true;
 			background = true;
-			backgroundColor = 0x222222;
-			*/
-			 
+			backgroundColor = 0x222222;*/
+	 
 			wordWrap = true;
 			
-			updateStyles()    
+			updateStyles();
+			 
+			
 		}
+		
+		/**
+		 * A reference to the <code>Subtitles</code> instance.
+		 * @see org.mindpirates.video.subs.Subtitles
+		 */
+		public function get subs():Subtitles
+		{
+			return _subs;
+		}
+		
+		
+		
+		override public function set text(value:String):void
+		{
+			_text = value; 
+			
+			if (value) {
+				value = '<span class="subtitle">' + 
+					value.replace(/\r\n/g,'<br>')
+					.replace(/\r/g,'<br>')
+					.replace(/\n/g,'<br>')
+					.replace(/<b>/g,'<strong>')
+					.replace(/<\/b>/g, '</strong>') 
+					+ '</span>'
+			} 
+			htmlText = StringUtils.removeExtraWhitespace(value); 	
+		}
+		
 		public function get fontName():String
 		{
 			return _fontName;
 		}
 		private function updateStyles():void
 		{
+		 
 			var _text:String = htmlText;
 			
 			var ss:StyleSheet = new StyleSheet();
@@ -72,13 +118,13 @@ package org.mindpirates.video.subs.view
 			ss.setStyle('i', {
 				color:'#FFFFFF',
 				fontSize: _fontSize,
-				fontFamily: fontName
+				fontFamily: fontName+' Italic'
 			});
 			ss.setStyle('strong', {
 				color:'#FFFFFF',
 				fontSize: _fontSize,
 				fontWeight: 'bold',
-				fontFamily: fontName,
+				fontFamily: fontName+' Bold',
 				display: 'inline'
 			});  
 			
@@ -99,6 +145,7 @@ package org.mindpirates.video.subs.view
 			return _fontSize;
 		}
 		private var _scale:Number;
+		private var _text:String;
 		public function set scale(value:Number):void
 		{ 
 			_scale = value;

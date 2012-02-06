@@ -75,14 +75,16 @@ package org.mindpirates.video
 	[Event(name="error", type="org.mindpirates.video.events.VideoPlayerEvent")]
 	
 	/**
-	 * Videoplayer class skeleton.
-	 * Base class for videoplayers. Implements IVideoPlayer and defines documented Events for the Flash Builder IDE.<br>
-	 * Derived classes should override the functions and implement their actual functionality.
-	 * @author Jovica Aleksic (jovi@mindpirates.org)
+	 * The <code>VideoPlayerBase</code> class is a base class for videoplayer implementations.<br>
+	 * The only functions that are concretly implemented are <code>createVideoPlayerEvent</code> and <code>get displayObject</code>.<br>
+	 * All other functions must be overriden and implemented by the derived class.<br>
+	 * @see #displayObject displayObject
+	 * @see #createVideoPlayerEvent() createVideoPlayerEvent
+	 * @author Jovica Aleksic
 	 */
-	public class VideoPlayer extends Sprite implements IVideoPlayer
+	public class VideoPlayerBase extends Sprite implements IVideoPlayer
 	{
-		public function VideoPlayer()
+		public function VideoPlayerBase()
 		{
 			super();
 		}
@@ -108,6 +110,7 @@ package org.mindpirates.video
 		public function get player():Object
 		{
 			// must be implemented by derived classes
+			throw new Error('function get player() not implemented');
 			return null;
 		}
 		
@@ -117,6 +120,7 @@ package org.mindpirates.video
 		public function get ui():IVideoPlayerUI
 		{
 			// must be implemented by derived classes
+			throw new Error('function get ui() not implemented');
 			return null;
 		}
 		
@@ -126,6 +130,7 @@ package org.mindpirates.video
 		public function load(id:String):void
 		{
 			// must be implemented by derived classes
+			throw new Error('function load() not implemented');
 		}
 		
 		/**
@@ -134,6 +139,7 @@ package org.mindpirates.video
 		public function get videoID():String
 		{
 			// must be implemented by derived classes
+			throw new Error('function get videoID() not implemented');
 			return null;
 		}
 		
@@ -143,6 +149,7 @@ package org.mindpirates.video
 		public function play():void
 		{
 			// must be implemented by derived classes
+			throw new Error('function play() not implemented');
 		}
 		
 		
@@ -152,6 +159,7 @@ package org.mindpirates.video
 		public function pause():void
 		{
 			// must be implemented by derived classes
+			throw new Error('function pause() not implemented');
 		}
 		
 		/**
@@ -160,6 +168,7 @@ package org.mindpirates.video
 		public function stop():void
 		{
 			// must be implemented by derived classes
+			throw new Error('function stop() not implemented');
 		}
 		
 		/**
@@ -168,6 +177,7 @@ package org.mindpirates.video
 		public function seekToTime(time:int):void
 		{
 			// must be implemented by derived classes
+			throw new Error('function seekToTime() not implemented');
 		}
 		
 		/**
@@ -176,6 +186,7 @@ package org.mindpirates.video
 		public function seekToPercent(percent:int):void
 		{
 			// must be implemented by derived classes
+			throw new Error('function seekToPercent() not implemented');
 		}
 		
 		/**
@@ -184,6 +195,7 @@ package org.mindpirates.video
 		public function setSize(w:int, h:int):void
 		{
 			// must be implemented by derived classes
+			throw new Error('function setSize() not implemented');
 		}
 		
 		/**
@@ -192,6 +204,7 @@ package org.mindpirates.video
 		public function get positionTime():int
 		{
 			// must be implemented by derived classes
+			throw new Error('function get positionTime() not implemented');
 			return 0;
 		}
 		
@@ -201,6 +214,7 @@ package org.mindpirates.video
 		public function get positionPercent():Number
 		{
 			// must be implemented by derived classes
+			throw new Error('function get positionPercent() not implemented');
 			return 0;
 		}
 		
@@ -210,7 +224,19 @@ package org.mindpirates.video
 		public function get duration():int
 		{
 			// must be implemented by derived classes
+			throw new Error('function get duration() not implemented');
 			return 0;
+		}
+		
+		
+		/**
+		 * @copy org.mindpirates.video.IVideoPlayer#isReady
+		 */
+		public function get isReady():Boolean
+		{
+			// must be implemented by derived classes
+			throw new Error('function get isReady() not implemented');
+			return false;
 		}
 		
 		/**
@@ -219,6 +245,7 @@ package org.mindpirates.video
 		public function get isPlaying():Boolean
 		{
 			// must be implemented by derived classes
+			throw new Error('function get isPlaying() not implemented');
 			return false;
 		}
 		
@@ -228,6 +255,7 @@ package org.mindpirates.video
 		public function get isPaused():Boolean
 		{
 			// must be implemented by derived classes
+			throw new Error('function get isPaused() not implemented');
 			return false;
 		}
 		
@@ -239,7 +267,7 @@ package org.mindpirates.video
 		 * @param originalEvent (Optional) The event initially dispatched by the moogaloop player.
 		 * @return The created <code>VideoPlayerEvent</code>
 		 */ 
-		public function createVideoEvent(type:String, originalEvent:Event=null):VideoPlayerEvent
+		public function createVideoPlayerEvent(type:String, originalEvent:Event=null):VideoPlayerEvent
 		{
 			var event:VideoPlayerEvent = new VideoPlayerEvent( type );
 			event.originalEvent = originalEvent;

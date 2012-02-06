@@ -14,7 +14,7 @@ package org.mindpirates.video.vimeo
 	import flash.system.Security;
 	import flash.utils.Timer;
 	
-	import org.mindpirates.video.VideoPlayer;
+	import org.mindpirates.video.VideoPlayerBase;
 	
 	/**
 	 * <h3>VimeoPlayerBase</h3>
@@ -37,7 +37,7 @@ package org.mindpirates.video.vimeo
 	 * 
 	 * @author (Edited by) Jovica Aleksic (jovi@mindpirates.org)
 	 */
-	public class VimeoPlayerBase extends VideoPlayer {
+	public class VimeoPlayerBase extends VideoPlayerBase {
 
 		internal const MOOGALOOP_URL:String = "http://api.vimeo.com/moogaloop_api.swf";
 		
@@ -76,7 +76,6 @@ package org.mindpirates.video.vimeo
 		 * The ID of the current video.
 		 */
 		internal var _clip_id:int;
-		
 		
 		public function VimeoPlayerBase(oauth_key:String, clip_id:int, w:int, h:int, fp_version:String='10', api_version:int=2)
 		{

@@ -7,9 +7,9 @@ package org.mindpirates.video.vimeo
 	import flash.geom.Point;
 	import flash.utils.Timer;
 	
-	import org.mindpirates.video.VideoPlayer;
+	import org.mindpirates.video.VideoPlayerBase;
 	import org.mindpirates.video.events.VideoPlayerEvent;
-	import org.mindpirates.video.subs.SubtitlesController;
+	import org.mindpirates.video.subs.Subtitles;
 	import org.mindpirates.video.subs.view.SubtitlesUI;
 
 	public class VimeoSubtitlesUI extends SubtitlesUI
@@ -27,9 +27,9 @@ package org.mindpirates.video.vimeo
 		 */
 		private var _initialSelectBoxPosition:Point;
 		
-		public function VimeoSubtitlesUI(subtitles:SubtitlesController)
+		public function VimeoSubtitlesUI(target:Subtitles)
 		{
-			super(subtitles);
+			super(target); 
 		}
 		 
 		
@@ -107,7 +107,7 @@ package org.mindpirates.video.vimeo
 		 */
 		public function get moogaloop():VimeoPlayer
 		{
-			return videoPlayer as VimeoPlayer
+			return subs.main.videoPlayer as VimeoPlayer
 		}
 		 
 	}

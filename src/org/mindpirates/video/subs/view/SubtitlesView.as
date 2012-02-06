@@ -1,27 +1,28 @@
 package org.mindpirates.video.subs.view
 {
 	import flash.display.Sprite;
-	import org.mindpirates.video.subs.SubtitlesController;
 	
+	import org.mindpirates.video.subs.Subtitles;
 	
+	/**
+	 * The <code>SubtitlesView</code> class contains the textfield for displaying subtitles.It takes care of positioning and scaling.
+	 */
 	public class SubtitlesView extends Sprite
 	{
 		public var textfield:SubtitleTextField;
-		
-		/**
-		 * The <code>SubtitlesComponent</code> instance
-		 * @see org.mindpirates.video.subs.SubtitlesComponent
-		 */
-		private var subtitleComponent:SubtitlesController;
-		
-		public function SubtitlesView(subtitles:SubtitlesController)
+		 
+		public function SubtitlesView(target:Subtitles)
 		{
-			super();
-			subtitleComponent = subtitles;
-			
-			textfield = new SubtitleTextField(subtitleComponent.flashVars);
+			super(); 
+			 
+			textfield = new SubtitleTextField(target);
 			addChild(textfield);
 			
+			textfield.width = target.main.stage.stageWidth - 40; 
+			textfield.height = 30;
+			textfield.x = 20;
+			textfield.y = 20; 
+			textfield.text = "#test"
 		}
 	}
 }

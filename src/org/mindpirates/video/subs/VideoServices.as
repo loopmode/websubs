@@ -1,4 +1,4 @@
-package org.mindpirates.video
+package org.mindpirates.video.subs
 {
 	/**
 	 * Lists supported video services.

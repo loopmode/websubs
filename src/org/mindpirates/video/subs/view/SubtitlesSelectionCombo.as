@@ -58,5 +58,23 @@ package org.mindpirates.video.subs.view
 			}
 			return new DataProvider(dp);
 		}
+		
+		
+		/**
+		 * Returns the index of an item based on the fileLoader reference.
+		 * @param fileLoader The fileLoader of the searched list item.
+		 * @return The index of the item within the dataProvider or -1 if no match was found.
+		 */ 
+		public function getFileIndex(fileLoader:SubtitleFileLoader):int
+		{ 
+			var i:int = 0;
+			while (i<dataProvider.length) {
+				if (dataProvider.getItemAt(i).fileLoader == fileLoader) {
+					return i;
+				}
+				i++;
+			}
+			return -1;
+		}
 	}
 }

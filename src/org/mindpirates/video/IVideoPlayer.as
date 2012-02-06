@@ -11,6 +11,11 @@ package org.mindpirates.video
 	{
 		
 		/**
+		 * Whether or not the external player is loaded and ready.
+		 */
+		function get isReady():Boolean;
+		
+		/**
 		 * Reference to the loaded external player
 		 */ 
 		function get player():Object;

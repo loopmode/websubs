@@ -6,8 +6,8 @@ package org.mindpirates.video.vimeo
 	
 	import org.mindpirates.video.IVideoPlayer;
 	import org.mindpirates.video.IVideoPlayerUI;
-	import org.mindpirates.video.VideoServices;
 	import org.mindpirates.video.events.VideoPlayerEvent;
+	import org.mindpirates.video.subs.VideoServices;
 	
 	/**
 	 * VideoPlayer wrapper class for the Moogaloop player from vimeo.com
@@ -18,7 +18,7 @@ package org.mindpirates.video.vimeo
 	 * </ul>
 	 * @author Jovica Aleksic (jovi@mindpirates.org)
 	 */
-	public class VimeoPlayer extends VimeoPlayerBase
+	public class VimeoPlayer extends VimeoPlayerBase implements IVideoPlayer
 	{
 		
 		/** 
@@ -40,6 +40,12 @@ package org.mindpirates.video.vimeo
 		 */
 		private var _ui:VimeoPlayerUI;
 		
+		
+		/**
+		 * Holds the value of <code>isReady</code>. Will be set to true once the external player is loaded.
+		 * @see #isReady
+		 */
+		private var _isReady:Boolean;
 		
 		/**
 		 * Vimeo Moogaloop implementation of the VideoPlayer class.
@@ -81,7 +87,8 @@ package org.mindpirates.video.vimeo
 		override internal function playerLoaded():void
 		{
 			_ui = new VimeoPlayerUI( moogaloop as Sprite );
-			dispatchEvent( createVideoEvent( VideoPlayerEvent.PLAYER_READY ) );
+			_isReady = true;
+			dispatchEvent( createVideoPlayerEvent( VideoPlayerEvent.PLAYER_READY ) );
 		}
 	 
 		
@@ -92,13 +99,13 @@ package org.mindpirates.video.vimeo
 		 */
 		override internal function readyHandler(event:Event):void
 		{
-			dispatchEvent( createVideoEvent( VideoPlayerEvent.VIDEO_READY, event ) );
+			dispatchEvent( createVideoPlayerEvent( VideoPlayerEvent.VIDEO_READY, event ) );
 		}
 		
 		override public function load(id:String):void
 		{
 			loadVideo(int(id));
-			dispatchEvent( createVideoEvent( VideoPlayerEvent.LOAD ) );
+			dispatchEvent( createVideoPlayerEvent( VideoPlayerEvent.LOAD ) );
 		}
 		
 		override public function get videoID():String 
@@ -113,7 +120,7 @@ package org.mindpirates.video.vimeo
 		 */
 		override internal function loadProgressHandler(event:Event):void
 		{
-			if (api_version == 2) dispatchEvent( createVideoEvent( VideoPlayerEvent.LOAD_PROGRESS, event ) );
+			if (api_version == 2) dispatchEvent( createVideoPlayerEvent( VideoPlayerEvent.LOAD_PROGRESS, event ) );
 		}
 		
 		/**
@@ -123,7 +130,7 @@ package org.mindpirates.video.vimeo
 		 */
 		override internal function onLoadingHandler(event:Event):void
 		{
-			if (api_version == 1) dispatchEvent( createVideoEvent( VideoPlayerEvent.LOAD_PROGRESS, event ) );
+			if (api_version == 1) dispatchEvent( createVideoPlayerEvent( VideoPlayerEvent.LOAD_PROGRESS, event ) );
 		}
 
 		override public function play() : void
@@ -139,7 +146,7 @@ package org.mindpirates.video.vimeo
 		 */
 		override internal function playHandler(event:Event):void
 		{
-			if (api_version == 2) dispatchEvent( createVideoEvent( VideoPlayerEvent.PLAY, event ));
+			if (api_version == 2) dispatchEvent( createVideoPlayerEvent( VideoPlayerEvent.PLAY, event ));
 		}
 		
 		/** 
@@ -148,7 +155,7 @@ package org.mindpirates.video.vimeo
 		 */
 		override internal function onPlayHandler(event:Event):void
 		{
-			if (api_version == 1) dispatchEvent(createVideoEvent( VideoPlayerEvent.PLAY, event ));
+			if (api_version == 1) dispatchEvent(createVideoPlayerEvent( VideoPlayerEvent.PLAY, event ));
 		}
 		
 		/** 
@@ -157,7 +164,7 @@ package org.mindpirates.video.vimeo
 		 */
 		override internal function onProgressHandler(event:Event):void
 		{
-			if (api_version == 1) dispatchEvent(createVideoEvent( VideoPlayerEvent.PLAY_PROGRESS, event ));
+			if (api_version == 1) dispatchEvent(createVideoPlayerEvent( VideoPlayerEvent.PLAY_PROGRESS, event ));
 		}
 		
 		/**
@@ -167,7 +174,7 @@ package org.mindpirates.video.vimeo
 		 */
 		override internal function playProgressHandler(event:Event):void
 		{
-			if (api_version == 2) dispatchEvent( createVideoEvent( VideoPlayerEvent.PLAY_PROGRESS, event ));
+			if (api_version == 2) dispatchEvent( createVideoPlayerEvent( VideoPlayerEvent.PLAY_PROGRESS, event ));
 		}
 		
 		override public function pause() : void
@@ -184,7 +191,7 @@ package org.mindpirates.video.vimeo
 		 */
 		override internal function pauseHandler(event:Event):void
 		{
-			if (api_version == 2) dispatchEvent(createVideoEvent( VideoPlayerEvent.PAUSE, event ));
+			if (api_version == 2) dispatchEvent(createVideoPlayerEvent( VideoPlayerEvent.PAUSE, event ));
 		}
 		
 		/**
@@ -194,7 +201,7 @@ package org.mindpirates.video.vimeo
 		 */
 		override internal function onPauseHandler(event:Event):void
 		{
-			if (api_version == 1) dispatchEvent(createVideoEvent( VideoPlayerEvent.PAUSE, event ));
+			if (api_version == 1) dispatchEvent(createVideoPlayerEvent( VideoPlayerEvent.PAUSE, event ));
 		}
 		 
 		override public function stop():void
@@ -202,7 +209,7 @@ package org.mindpirates.video.vimeo
 			_isPlaying = false;
 			_isPaused = false;
 			doStop();
-			dispatchEvent(createVideoEvent( VideoPlayerEvent.STOP ));
+			dispatchEvent(createVideoPlayerEvent( VideoPlayerEvent.STOP ));
 		}
 
 		override public function seekToTime(time:int):void
@@ -223,7 +230,7 @@ package org.mindpirates.video.vimeo
 		 */
 		override internal function seekHandler(event:Event):void
 		{
-			if (api_version == 2) dispatchEvent(createVideoEvent( VideoPlayerEvent.SEEK, event ));
+			if (api_version == 2) dispatchEvent(createVideoPlayerEvent( VideoPlayerEvent.SEEK, event ));
 		}
 		
 		/**
@@ -233,7 +240,7 @@ package org.mindpirates.video.vimeo
 		 */
 		override internal function onSeekHandler(event:Event):void
 		{
-			if (api_version == 1) dispatchEvent(createVideoEvent( VideoPlayerEvent.SEEK, event ));
+			if (api_version == 1) dispatchEvent(createVideoPlayerEvent( VideoPlayerEvent.SEEK, event ));
 		}
 		
 		
@@ -244,7 +251,7 @@ package org.mindpirates.video.vimeo
 
 		override public function get positionTime():int
 		{
-			return moogaloop.getCurrentTime()*1000;
+			return moogaloop ? moogaloop.getCurrentTime()*1000 : 0;
 		}
 		
 		override public function get positionPercent():Number
@@ -252,6 +259,14 @@ package org.mindpirates.video.vimeo
 			return Math.round(positionTime / duration * 100) / 100;
 		}
 
+		/**
+		 * @copy org.mindpirates.video.IVideoPlayer#isReady
+		 */
+		override public function get isReady():Boolean
+		{
+			return _isReady;
+		}
+		
 		override public function get isPlaying():Boolean
 		{
 			return _isPlaying;
