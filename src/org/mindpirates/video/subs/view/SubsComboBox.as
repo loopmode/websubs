@@ -1,6 +1,6 @@
 package org.mindpirates.video.subs.view
 {
-	import embed.Fonts;
+	import embed.fonts.Fonts;
 	
 	import fl.controls.ComboBox;
 	import fl.data.DataProvider;

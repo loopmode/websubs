@@ -1,6 +1,6 @@
 package org.mindpirates.video.subs.view
 {
-	import embed.Fonts;
+	import embed.fonts.Fonts;
 	
 	import flash.filters.DropShadowFilter;
 	import flash.filters.GlowFilter;
@@ -109,10 +109,7 @@ package org.mindpirates.video.subs.view
 			updateStyles();
 		}
 		
-		public function get fontName():String
-		{
-			return _fontName;
-		}
+		
 		private function updateStyles():void
 		{
 		 
@@ -179,11 +176,15 @@ package org.mindpirates.video.subs.view
 		{
 			return _scale;
 		}
-		public function set font(name:String):void
+		public function set fontName(name:String):void
 		{
 			_fontName = name;
 			trace(this, 'set font', name)
 			updateStyles(); 
+		}
+		public function get fontName():String
+		{
+			return _fontName;
 		}
 	}
 }

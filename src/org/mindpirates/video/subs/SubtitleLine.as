@@ -55,6 +55,10 @@ package org.mindpirates.video.subs {
 			_start = roundToDigit(value,3);	
 		}
 		
+		// TODO document time format
+		/**
+		 * The start position of this subtitle line
+		 */
 		public function get start():Number
 		{
 			return _start;
@@ -68,6 +72,10 @@ package org.mindpirates.video.subs {
 			_end = roundToDigit(value,3);	
 		}
 		
+		// TODO document time format
+		/**
+		 * The end position of this subtitle line
+		 */
 		public function get end():Number
 		{
 			return _end;

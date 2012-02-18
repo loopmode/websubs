@@ -90,7 +90,8 @@ package org.mindpirates.video.subs.loading
 		 */
 		public function getFileByID(id:String):SubsFileLoader
 		{
-			for each (var file:SubsFileLoader in files) {
+			trace(this, 'getFilebyID('+id+')');
+			for each (var file:SubsFileLoader in files) { 
 				if (file.id == id) {
 					return file;
 				}

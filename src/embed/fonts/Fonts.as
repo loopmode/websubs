@@ -1,4 +1,4 @@
-package embed 
+package embed.fonts 
 {
 	import flash.text.Font;
 	

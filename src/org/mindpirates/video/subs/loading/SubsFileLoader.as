@@ -5,9 +5,11 @@ package org.mindpirates.video.subs.loading
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	
-	import org.mindpirates.video.subs.SubtitleParser;
 	import org.mindpirates.video.subs.SubtitleFormats;
+	import org.mindpirates.video.subs.SubtitleParser;
 	import org.mindpirates.video.subs.SubtitlesFileData;
+	
+	import ru.etcs.utils.FontLoader;
 	
 	/** 
 	 * Dispatched when the subtitle file has been loaded.
@@ -27,8 +29,7 @@ package org.mindpirates.video.subs.loading
 		 * The xml from the subtitleList XML file.
 		 */
 		public var xml:XML;
-		 
-		private var loader:URLLoader;
+		  
 		private var _data:Object;
 		private var _isLoaded:Boolean;
 		private var _subtitles:SubtitlesFileData;
@@ -110,36 +111,10 @@ package org.mindpirates.video.subs.loading
 		}
 		
 		/**
-		 * Loads the subtitle file specified by the value of <code>xml</code>
-		 * @see #xml xml
+		 * Returns the data of a subtitles file. 
+		 * @return SubtitlesFileData
+		 * @see org.mindpirates.video.subs.SubtitlesFileData
 		 */
-		public function load():void
-		{
-			trace(this, 'load()', fileURL);
-			_isLoaded = false;
-			loader = new URLLoader();
-			loader.addEventListener(Event.COMPLETE, handleLoadComplete);
-			loader.load( new URLRequest( fileURL) );
-		}
-		
-		protected function handleLoadComplete(event:Event):void
-		{
-			trace(this, 'loaded:', fileURL);
-			_data = event.target.data;
-			loader.removeEventListener(Event.COMPLETE, handleLoadComplete);	
-			_isLoaded = true;
-			
-			
-			switch (format) {
-				case SubtitleFormats.SRT:
-					var lines:Array = SubtitleParser.parseSRT( String(_data) );
-					trace('parsed '+lines.length+' subtitle lines');
-					_subtitles = new SubtitlesFileData(lines, fileURL);	
-			}
-			
-			dispatchEvent( new Event( Event.COMPLETE ) );
-		}
-		
 		public function get subtitles():SubtitlesFileData
 		{
 			return _subtitles;
@@ -152,6 +127,57 @@ package org.mindpirates.video.subs.loading
 		{
 			return _isLoaded;
 		}
+		
+		/**
+		 * Loads the subtitle file specified by the value of <code>xml</code>
+		 * @see #xml xml
+		 */
+		public function load():void
+		{
+			trace(this, 'load()', fileURL);
+			_isLoaded = false;
+			var loader:URLLoader = new URLLoader();
+			loader.addEventListener(Event.COMPLETE, handleLoadComplete);
+			loader.load( new URLRequest( fileURL) );
+		}
+		
+		protected function handleLoadComplete(event:Event):void
+		{
+			trace(this, 'loaded:', fileURL);
+			var loader:URLLoader = event.target as URLLoader;
+			loader.removeEventListener(Event.COMPLETE, handleLoadComplete);	
+			_data = loader.data;
+			_isLoaded = true;
+			
+			
+			switch (format) {
+				case SubtitleFormats.SRT:
+					var lines:Array = SubtitleParser.parseSRT( String(_data) );
+					trace('parsed '+lines.length+' subtitle lines');
+					_subtitles = new SubtitlesFileData(lines, fileURL);	
+			}
+			trace('fontFile', fontFile);
+			if(fontFile) {
+				loadFont();			
+			}
+			else {
+				dispatchEvent( new Event( Event.COMPLETE ) );					
+			}
+		}
+		
+		private function loadFont():void
+		{ 
+			var loader:FontLoader = new FontLoader();
+			loader.addEventListener(Event.COMPLETE, handleFontLoaded); 
+			loader.load(new URLRequest(fontFile));
+		}
+		
+		protected function handleFontLoaded(event:Event):void
+		{
+			var loader:FontLoader = event.target as FontLoader;
+			loader.removeEventListener(Event.COMPLETE, handleFontLoaded);
+			dispatchEvent( new Event( Event.COMPLETE ) );	
+		}		
 		 
 	}
 }

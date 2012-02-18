@@ -1,6 +1,6 @@
 package org.mindpirates.video.subs
 {
-	import embed.Fonts;
+	import embed.fonts.Fonts;
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -16,6 +16,7 @@ package org.mindpirates.video.subs
 	import org.mindpirates.video.events.VideoPlayerEvent;
 	import org.mindpirates.video.subs.loading.SubsFileLoader;
 	import org.mindpirates.video.subs.loading.SubsListLoader;
+	import org.mindpirates.video.subs.view.SubtitleTextField;
 	import org.mindpirates.video.subs.view.SubtitlesUI;
 	import org.mindpirates.video.subs.view.SubtitlesView;
 	import org.mindpirates.video.vimeo.VimeoSubtitlesUI;
@@ -216,7 +217,7 @@ package org.mindpirates.video.subs
 		 */
 		private function loadDefaultSubtitles():void
 		{
-			var file:SubsFileLoader;
+			var file:SubsFileLoader; 
 			if (main.flashVars.subtitles) {
 				file = listLoader.getFileByID( main.flashVars.subtitles );
 				if (!file) {
@@ -262,6 +263,9 @@ package org.mindpirates.video.subs
 			if (listIndex > -1) {
 				view.ui.selectBox.selectedIndex = listIndex;
 			}
+			// set the font
+			view.textField.fontName = file.fontName ? file.fontName : SubtitleTextField.defaultFontName;
+			view.textField.fontSize = file.fontSize ? file.fontSize : SubtitleTextField.defaultFontSize;
 		}
 		 
 		

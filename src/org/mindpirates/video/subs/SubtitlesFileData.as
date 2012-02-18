@@ -8,7 +8,9 @@ package org.mindpirates.video.subs
 	 
 
 	/** 
-	 * @author Jovica Aleksic
+	 * Represents the data contents of a subtitle file.
+	 * @see #list
+	 * @see #getLineAtTime()
 	 */
 	public class SubtitlesFileData
 	{
@@ -20,6 +22,11 @@ package org.mindpirates.video.subs
 			_data = data; 
 			url = src;
 		} 
+		
+		/**
+		 * An array containing SubtitleLine objects for each subtitle file.
+		 * @see org.mindpirates.video.subs.SubtitleLine
+		 */
 		public function get list():Array
 		{
 			return _data;
@@ -59,11 +66,10 @@ package org.mindpirates.video.subs
 			}
 			return result;
 		}
-
-		// TODO Specify and document the format of the time argument.
+ 
 		/**
 		 * Returns the subtitle line for a given time position.
-		 * @param time 
+		 * @param time The time position in seconds
 		 * @return A <code>SubtitleLine</code> object or null
 		 * @see org.mindpirates.video.subs.SubtitleLine
 		 */
