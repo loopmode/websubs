@@ -21,11 +21,10 @@ package embed
 	    fontName = "UNI_05_53",
 	    mimeType = "application/x-font",
 	    fontWeight="normal",
-	    fontStyle="normal",
-	    unicodeRange="U+0040-U+00FF,U+0030-U+0039,U+003A-U+0040",
+	    fontStyle="normal", 
 	    advancedAntiAliasing="true",
 	    embedAsCFF="false")]
-		public static const UNI : Class;
+		private static const UNI : Class;
 		
 		
 		/*
@@ -33,16 +32,15 @@ package embed
 		DEJAVU SANS
 		---------------------------------------------------------------
 		*/
-		public static var DejaVu_Sans:String = "DejaVu Sans"; 
+		public static var DejaVu:String = "DejaVu"; 
 		[Embed(source="DEJAVUSANS_0.TTF",
-	    fontName = "DejaVu Sans",
+	    fontName = "DejaVu",
 	    mimeType = "application/x-font",
 	    fontWeight="normal",
-	    fontStyle="normal",
-	    unicodeRange="U+0040-U+00FF,U+0030-U+0039,U+003A-U+0040",
+	    fontStyle="normal", 
 	    advancedAntiAliasing="true",
 	    embedAsCFF="false")]
-		public static const DEJAVU : Class;
+		private static const DEJAVU : Class;
 		
 		
 		/*
@@ -51,16 +49,15 @@ package embed
 		---------------------------------------------------------------
 		*/
 		
-		public static var DejaVuItalic:String = "DejaVu Italic";
+		public static var DejaVu_Oblique:String = "DejaVu Oblique";
 		[Embed(source="DEJAVUSANS-OBLIQUE_0.TTF",
-	    fontName = "DejaVu Italic",
+	    fontName = "DejaVu Oblique",
 	    mimeType = "application/x-font",
 	    fontWeight="normal",
-	    fontStyle="italic",
-	    unicodeRange="U+0040-U+00FF,U+0030-U+0039,U+003A-U+0040",
+	    fontStyle="oblique", 
 	    advancedAntiAliasing="true",
 	    embedAsCFF="false")]
-		public static const DEJAVU_ITALIC : Class;
+		private static const DEJAVU_OBLIQUE : Class;
 		
 		
 		/*
@@ -68,16 +65,15 @@ package embed
 		DEJAVU BOLD
 		---------------------------------------------------------------
 		*/
-		public static var DejaVuBold:String = "DejaVu Bold";
+		public static var DejaVu_Bold:String = "DejaVu Bold";
 		[Embed(source="DEJAVUSANSCONDENSED-BOLD_0.TTF",
 	    fontName = "DejaVu Bold",
 	    mimeType = "application/x-font",
-	    fontWeight="normal",
-	    fontStyle="italic",
-	    unicodeRange="U+0040-U+00FF,U+0030-U+0039,U+003A-U+0040",
+	    fontWeight="bold",
+	    fontStyle="normal", 
 	    advancedAntiAliasing="true",
 	    embedAsCFF="false")]
-		public static const DEJAVU_BOLD : Class;
+		private static const DEJAVU_BOLD : Class;
 		
 		
 		

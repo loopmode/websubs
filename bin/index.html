@@ -19,17 +19,21 @@
 		</style>
 		
 		<script type="text/javascript">
-		
-			var flashvars = {
-					video_id: 17712557,
-					subtitles_list: 'media/srt/subtitles.xml',
-					subtitles: 'test'
-				},
-				params = {allowFullScreen: true, allowScriptAccess: 'always', wmode: 'window'},
-				attributes = {};
+			$(function() {
+				var flashvars = {
+						video_id: 17712557,
+						subtitles_list: 'media/srt/subtitles.xml',
+						subtitles: 'de'
+					},
+					params = {allowFullScreen: true, allowScriptAccess: 'always', wmode: 'window'},
+					attributes = {},
+					callback = function() {
+						$('#myContent').removeClass('loading');
+					};
 				
-			swfobject.embedSWF("media/swf/VimeoSubtitlePlayer.swf", "myContent", "640", "360", "11.1.0", "expressInstall.swf", flashvars, params, attributes);
-			
+				$('#myContent').addClass('loading');	 
+				swfobject.embedSWF("media/swf/VimeoSubtitlePlayer.swf", "myContent", "640", "360", "11.1.0", "expressInstall.swf", flashvars, params, attributes, callback);
+			});
 		</script>
 		
 	</head>

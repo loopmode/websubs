@@ -9,5 +9,5 @@
 	<subtitle format="srt" id="jap" title="Japanese" fontName="Bitstream Cyberbit" fontFile="../media/swf/font-Cyberbit-japanese.swf" fontSize="23">./media/srt/problema_japanese.srt</subtitle>
 	<subtitle format="srt" id="por" title="Portuguese">./media/srt/problema_portuguese.srt</subtitle>  
 	<subtitle format="srt" id="esp" title="Spanish">./media/srt/problema_spanish.srt</subtitle> 
-	<subtitle format="srt" id="test" title="Test file">./media/srt/test.srt</subtitle> 
+	<subtitle format="srt" id="test" title="Example">./media/srt/example.srt</subtitle> 
 </subtitles>

@@ -10,11 +10,11 @@ package org.mindpirates.video.subs.view
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
 	
-	import org.mindpirates.video.subs.loading.SubtitleFileLoader;
+	import org.mindpirates.video.subs.loading.SubsFileLoader;
 	
-	public class SubtitlesSelectionCombo extends ComboBox
+	public class SubsComboBox extends ComboBox
 	{
-		public function SubtitlesSelectionCombo()
+		public function SubsComboBox()
 		{
 			super();
 		}
@@ -36,6 +36,8 @@ package org.mindpirates.video.subs.view
 			textField.setStyle("textFormat", format);
 			textField.setStyle("antiAliasType", AntiAliasType.NORMAL);
 			textField.textField.autoSize = TextFieldAutoSize.LEFT;
+			
+			
 		}
 		 	 
 		override public function set dataProvider(arg0:DataProvider):void
@@ -46,10 +48,10 @@ package org.mindpirates.video.subs.view
 			setupStyles();
 		}
 		
-		public function createDataProvider(files:Vector.<SubtitleFileLoader>):DataProvider
+		public function createDataProvider(files:Vector.<SubsFileLoader>):DataProvider
 		{
 			var dp:Array = [];
-			for each (var file:SubtitleFileLoader in files) {
+			for each (var file:SubsFileLoader in files) {
 				dp.push({
 					label: file.title,
 					title: file.title,
@@ -65,7 +67,7 @@ package org.mindpirates.video.subs.view
 		 * @param fileLoader The fileLoader of the searched list item.
 		 * @return The index of the item within the dataProvider or -1 if no match was found.
 		 */ 
-		public function getFileIndex(fileLoader:SubtitleFileLoader):int
+		public function getFileIndex(fileLoader:SubsFileLoader):int
 		{ 
 			var i:int = 0;
 			while (i<dataProvider.length) {

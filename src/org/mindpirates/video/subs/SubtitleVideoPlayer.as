@@ -4,6 +4,7 @@ package org.mindpirates.video.subs
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
+	import flash.geom.Point; 
 	
 	import net.stevensacks.preloaders.CircleSlicePreloader;
 	
@@ -11,6 +12,12 @@ package org.mindpirates.video.subs
 	import org.mindpirates.video.events.VideoPlayerEvent;
 	import org.mindpirates.video.vimeo.VimeoAuth;
 	import org.mindpirates.video.vimeo.VimeoPlayer;
+	
+	/**
+	 * Dispatched when the player has been loaded.
+	 * @eventType org.mindpirates.video.events.VideoPlayerEvent
+	 */
+	[Event(name="lineChanged", type="org.mindpirates.video.events.SubtitleEvent")]
 	
 	/**
 	 * The <code>SubtitleVideoPlayer</code> class adds subtitle support to a videoplayer class.<br>
@@ -48,6 +55,11 @@ package org.mindpirates.video.subs
 		 */
 		private var _videoServiceName:String;
 		
+		/**
+		 * The initial size of the stage at startup. This is the size at which the player was originally embedded into the HTML page.<br>
+		 * The variable type is <code>Point</code>. The <code>x</code> value contains the <code>stage.stageWidth</code> value, and the <code>y</code> value contains the <code>stage.stageHeight</code> value.
+		 */
+		public var initialSize:Point;
 		
 		public function SubtitleVideoPlayer()
 		{
@@ -89,13 +101,14 @@ package org.mindpirates.video.subs
 		
 		protected function handleAdded(event:Event):void
 		{
+			initialSize = new Point(stage.stageWidth,stage.stageHeight);
 			setupStage();
 			showSpinner();
 			createPlayer();
 			createSubtitles();
 			addListeners();
 		}
-			
+		
 		
 		protected function handleRemoved(event:Event):void
 		{
@@ -137,6 +150,12 @@ package org.mindpirates.video.subs
 			videoPlayer.setSize(stage.stageWidth, stage.stageHeight);
 		}
 		 
+		
+		public function get currentScale():Number
+		{
+			return stage.stageWidth / initialSize.x ;
+		}
+		
 		/*
 		--------------------------------------------------------------------------
 		

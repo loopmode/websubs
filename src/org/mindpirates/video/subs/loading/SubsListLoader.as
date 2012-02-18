@@ -4,13 +4,13 @@ package org.mindpirates.video.subs.loading
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	
-	import org.mindpirates.video.events.SubtitleListEvent;
+	import org.mindpirates.video.events.SubtitleListLoaderEvent;
 
 	/**
 	 * Dispatched subtitlelist has been loaded.
 	 * @eventType org.mindpirates.video.events.SubtitleListEvent
 	 */
-	[Event(name="loadComplete", type="org.mindpirates.video.events.SubtitleListEvent")]
+	[Event(name="loadComplete", type="org.mindpirates.video.events.SubtitleListLoaderEvent")]
 	
 	/**
 	 * The SubtitlesListLoader class loads the XML file with a listing of available subtitlefiles.<br>
@@ -18,7 +18,7 @@ package org.mindpirates.video.subs.loading
 	 * @see #files
 	 * @see org.mindpirates.video.subtitleplayer.loading.SubtitleFileLoader
 	 */
-	public class SubtitlesListLoader extends URLLoader
+	public class SubsListLoader extends URLLoader
 	{
 		/**
 		 * Holds the raw loaded data
@@ -34,9 +34,9 @@ package org.mindpirates.video.subs.loading
 		 * Holds the value of <code>files</code>
 		 * @see #files files
 		 */
-		private var _files:Vector.<SubtitleFileLoader>;
+		private var _files:Vector.<SubsFileLoader>;
 		
-		public function SubtitlesListLoader(request:URLRequest=null)
+		public function SubsListLoader(request:URLRequest=null)
 		{
 			super(request);
 		}
@@ -51,18 +51,18 @@ package org.mindpirates.video.subs.loading
 		{
 			_data = event.target.data;
 			_xml = new XML( event.target.data ); 
-			_files =  new Vector.<SubtitleFileLoader>();
+			_files =  new Vector.<SubsFileLoader>();
 			for (var i:int = 0; i<_xml.subtitle.length(); i++){
-				_files.push(new SubtitleFileLoader(_xml.subtitle[i]));
+				_files.push(new SubsFileLoader(_xml.subtitle[i]));
 			}
 			removeEventListener(Event.COMPLETE, handleComplete);
-			dispatchEvent( new SubtitleListEvent( SubtitleListEvent.LOAD_COMPLETE ) );
+			dispatchEvent( new SubtitleListLoaderEvent( SubtitleListLoaderEvent.LOAD_COMPLETE ) );
 		}
 		
 		/**
 		 * An Array (Vector.&lt;SubtitleFileLoader&gt;) containing SubtitleFileLoader instances for each of the subtitle files specified in the subtitleList XML.
 		 */
-		public function get files():Vector.<SubtitleFileLoader>
+		public function get files():Vector.<SubsFileLoader>
 		{
 			return _files;
 		}
@@ -79,7 +79,7 @@ package org.mindpirates.video.subs.loading
 		 * The subtitle file that corresponds to <code>defaultFileID</code>.
 		 * @see #defaultFileID 
 		 */
-		public function get defaultFile():SubtitleFileLoader
+		public function get defaultFile():SubsFileLoader
 		{
 			return getFileByID( defaultFileID );
 		}
@@ -88,9 +88,9 @@ package org.mindpirates.video.subs.loading
 		 * Returns a subtitle file based on its ID.
 		 * @return The subtitle file that matches the ID. If no result is found, <code>null</code> is returned.
 		 */
-		public function getFileByID(id:String):SubtitleFileLoader
+		public function getFileByID(id:String):SubsFileLoader
 		{
-			for each (var file:SubtitleFileLoader in files) {
+			for each (var file:SubsFileLoader in files) {
 				if (file.id == id) {
 					return file;
 				}
@@ -102,9 +102,9 @@ package org.mindpirates.video.subs.loading
 		 * Returns a subtitle file based on its url.
 		 * @return The subtitle file that matches the url. If no result is found, <code>null</code> is returned.
 		 */
-		public function getFileByUrl(url:String):SubtitleFileLoader
+		public function getFileByUrl(url:String):SubsFileLoader
 		{
-			for each (var file:SubtitleFileLoader in files) {
+			for each (var file:SubsFileLoader in files) {
 				if (file.fileURL == url) {
 					return file;
 				}

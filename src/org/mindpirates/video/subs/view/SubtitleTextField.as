@@ -7,8 +7,10 @@ package org.mindpirates.video.subs.view
 	import flash.geom.Matrix;
 	import flash.geom.Transform;
 	import flash.text.AntiAliasType;
+	import flash.text.Font;
 	import flash.text.StyleSheet;
 	import flash.text.TextField;
+	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
 	
@@ -44,7 +46,7 @@ package org.mindpirates.video.subs.view
 			 
 			_subs = target;
 			 
-			defaultFontName = Fonts.DejaVu_Sans;
+			defaultFontName = Fonts.DejaVu;
 			defaultFontSize = subs.main.flashVars.defaultFontSize;
 			
 			_fontName = defaultFontName;
@@ -61,16 +63,22 @@ package org.mindpirates.video.subs.view
 			defaultTextFormat = textFormat;
 			antiAliasType = AntiAliasType.ADVANCED;  
 			filters = [new DropShadowFilter(2,45,0,0.5,2,2), new GlowFilter(0,1,3,3,4)]; 
+			autoSize = TextFieldAutoSize.CENTER;
 			/*
 			border = true;
 			background = true;
-			backgroundColor = 0x222222;*/
-	 
+			backgroundColor = 0x222222; 
+	 		*/
 			wordWrap = true;
 			
-			updateStyles();
-			 
+			updateStyles(); 
 			
+			/*
+			var fonts:Array = Font.enumerateFonts(false);
+			fonts.sortOn("fontName", Array.CASEINSENSITIVE);
+			for each(var f:Font in fonts)
+			trace(f.fontName);
+			*/
 		}
 		
 		/**
@@ -85,9 +93,7 @@ package org.mindpirates.video.subs.view
 		
 		
 		override public function set text(value:String):void
-		{
-			_text = value; 
-			
+		{ 			
 			if (value) {
 				value = '<span class="subtitle">' + 
 					value.replace(/\r\n/g,'<br>')
@@ -95,9 +101,12 @@ package org.mindpirates.video.subs.view
 					.replace(/\n/g,'<br>')
 					.replace(/<b>/g,'<strong>')
 					.replace(/<\/b>/g, '</strong>') 
+					.replace(/<i>/g,'<em>')
+					.replace(/<\/i>/g, '</em>') 
 					+ '</span>'
 			} 
-			htmlText = StringUtils.removeExtraWhitespace(value); 	
+			htmlText = StringUtils.removeExtraWhitespace(value); 
+			updateStyles();
 		}
 		
 		public function get fontName():String
@@ -108,18 +117,22 @@ package org.mindpirates.video.subs.view
 		{
 		 
 			var _text:String = htmlText;
-			
+	 
 			var ss:StyleSheet = new StyleSheet();
 			ss.setStyle('.subtitle', {
 				color:'#FFFFFF',
 				fontSize: _fontSize,
 				fontFamily: fontName
 			});
-			ss.setStyle('i', {
+			 
+			ss.setStyle('em', {
 				color:'#FFFFFF',
-				fontSize: _fontSize,
-				fontFamily: fontName+' Italic'
+				fontSize: _fontSize,  
+				fontStyle: 'oblique',
+				display: 'inline',
+				fontFamily: fontName+' Oblique'
 			});
+			
 			ss.setStyle('strong', {
 				color:'#FFFFFF',
 				fontSize: _fontSize,
@@ -127,11 +140,12 @@ package org.mindpirates.video.subs.view
 				fontFamily: fontName+' Bold',
 				display: 'inline'
 			});  
-			
+			 
 			styleSheet = ss;	
-			
+			trace(_text);
 			htmlText = _text;
 		}
+		
 		public function set fontSize(value:Number):void
 		{
 			if (value < 1) {
@@ -140,12 +154,14 @@ package org.mindpirates.video.subs.view
 			_fontSize = value;
 			updateStyles();
 		}
+		
 		public function get fontSize():Number
 		{
 			return _fontSize;
 		}
-		private var _scale:Number;
-		private var _text:String;
+		
+		private var _scale:Number; 
+		
 		public function set scale(value:Number):void
 		{ 
 			_scale = value;
@@ -158,6 +174,7 @@ package org.mindpirates.video.subs.view
 			}
 			transform.matrix = matrix;
 		}
+		
 		public function get scale():Number
 		{
 			return _scale;

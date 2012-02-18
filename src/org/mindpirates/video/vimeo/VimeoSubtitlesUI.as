@@ -44,6 +44,7 @@ package org.mindpirates.video.vimeo
 		/**
 		 * Checks the opacity of the moogaloop UI and applies it to itself.<br>
 		 * When there was no user input for a while, moogaloop fades out its UI, and our subtitles UI must respond to that.
+		 * TODO: Find a good way to apply alpha on the items of the <code>selectBox</code> ComboBox in the subtitles UI without ugly side effects.
 		 */
 		override public function handleEnterFrame(event:Event):void
 		{
@@ -51,7 +52,8 @@ package org.mindpirates.video.vimeo
 			if (moogaloop.ui.controlBar && moogaloop.ui.controlBar.alpha) {
 				a = moogaloop.ui.controlBar.alpha;
 			}
-			alpha = a;
+			alpha = a; 
+			//subs.view.ui.selectBox.dropdown.alpha = a;
 		}
 		
 		/**

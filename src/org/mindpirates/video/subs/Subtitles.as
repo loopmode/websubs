@@ -11,13 +11,15 @@ package org.mindpirates.video.subs
 	import flash.utils.Timer;
 	
 	import org.mindpirates.video.VideoPlayerBase;
-	import org.mindpirates.video.events.SubtitleListEvent;
+	import org.mindpirates.video.events.SubtitleEvent;
+	import org.mindpirates.video.events.SubtitleListLoaderEvent;
 	import org.mindpirates.video.events.VideoPlayerEvent;
-	import org.mindpirates.video.subs.loading.SubtitleFileLoader;
-	import org.mindpirates.video.subs.loading.SubtitlesListLoader;
+	import org.mindpirates.video.subs.loading.SubsFileLoader;
+	import org.mindpirates.video.subs.loading.SubsListLoader;
 	import org.mindpirates.video.subs.view.SubtitlesUI;
 	import org.mindpirates.video.subs.view.SubtitlesView;
 	import org.mindpirates.video.vimeo.VimeoSubtitlesUI;
+	
 	
 	/**
 	 * This class displays subtitles for a videoPlayer.<br> 
@@ -29,12 +31,12 @@ package org.mindpirates.video.subs
 		/**
 		 * The SubtitlesList that loads the XML file containing paths to individual subtitle files.
 		 */
-		private var listLoader:SubtitlesListLoader;
+		private var listLoader:SubsListLoader;
 
 		/**
 		 * A Sprite that holds required UI elements.
 		 */
-		private var ui:SubtitlesUI;
+		//private var ui:SubtitlesUI;
 		 
 		
 		/**
@@ -70,13 +72,18 @@ package org.mindpirates.video.subs
 		/**
 		 * The subtitle file that is currently used.
 		 */
-		private var _currentFile:SubtitleFileLoader;
+		private var _currentFile:SubsFileLoader;
 		
 		/**
 		 * The <code>SubtitlesView</code> instance that contains the textfield.
 		 * @see org.mindpirates.video.subs.view.SubtitlesView
 		 */
-		private var view:SubtitlesView;
+		public var view:SubtitlesView;
+		
+		/**
+		 * The currently displayed subtitle line
+		 */
+		private var _currentSubtitleLine:SubtitleLine;
 		
 		
 		/**
@@ -115,7 +122,7 @@ package org.mindpirates.video.subs
 		{
 			destroyTimer();
 			removePlayerEvents();
-			ui.destroy();
+			view.destroy();
 		}
 		
 		/*
@@ -132,23 +139,14 @@ package org.mindpirates.video.subs
 
 			view = new SubtitlesView(this);
 			main.addChild(view);
-			 
-			// create the UI
-			switch (main.videoServiceName) {
-				case VideoServices.VIMEO:
-					ui = new VimeoSubtitlesUI(this);
-			}
-			main.addChild(ui);
 			
 			// init UI elements
 			if (main.flashVars.subtitlesList) {
-				ui.selectBox.addEventListener(Event.CHANGE, handleSelectFileChange);			
+				view.ui.selectBox.addEventListener(Event.CHANGE, handleSelectFileChange);			
 			}
 			else{
-				ui.selectBox.visible = false;
+				view.ui.selectBox.visible = false;
 			}
-			 
-			
 			
 		}
 		
@@ -165,21 +163,21 @@ package org.mindpirates.video.subs
 			if (!file) {
 				return;
 			}
-			listLoader = new SubtitlesListLoader();
-			listLoader.addEventListener(SubtitleListEvent.LOAD_COMPLETE, handleSubtitlesListComplete);
+			listLoader = new SubsListLoader();
+			listLoader.addEventListener(SubtitleListLoaderEvent.LOAD_COMPLETE, handleSubtitlesListComplete);
 			listLoader.load(new URLRequest(file+'?time='+new Date().time));
 		}
 		
 		protected function handleSubtitlesListComplete(event:Event):void
 		{
-			listLoader.removeEventListener(SubtitleListEvent.LOAD_COMPLETE, handleSubtitlesListComplete);
-			ui.selectBox.dataProvider = ui.selectBox.createDataProvider(listLoader.files);
+			listLoader.removeEventListener(SubtitleListLoaderEvent.LOAD_COMPLETE, handleSubtitlesListComplete);
+			view.ui.selectBox.dataProvider = view.ui.selectBox.createDataProvider(listLoader.files);
 			loadDefaultSubtitles();
 		}		
 		
 		protected function handleSelectFileChange(event:Event):void
 		{
-			var fileLoader:SubtitleFileLoader = ui.selectBox.selectedItem.fileLoader;
+			var fileLoader:SubsFileLoader = view.ui.selectBox.selectedItem.fileLoader;
 			if (!fileLoader.isLoaded) {
 				loadSubtitles( fileLoader );
 			}
@@ -200,7 +198,7 @@ package org.mindpirates.video.subs
 		 * Loads a subtitle file. Once the file is loaded, it will be displayed and set as <code>currentFile</code>.
 		 * @param fileLoader A <code>SubtitleFileLoader</code> object.
 		 */
-		public function loadSubtitles(fileLoader:SubtitleFileLoader):void
+		public function loadSubtitles(fileLoader:SubsFileLoader):void
 		{
 			fileLoader.addEventListener(Event.COMPLETE, handleSubtitleFileLoaded);
 			fileLoader.load();
@@ -218,7 +216,7 @@ package org.mindpirates.video.subs
 		 */
 		private function loadDefaultSubtitles():void
 		{
-			var file:SubtitleFileLoader;
+			var file:SubsFileLoader;
 			if (main.flashVars.subtitles) {
 				file = listLoader.getFileByID( main.flashVars.subtitles );
 				if (!file) {
@@ -242,7 +240,7 @@ package org.mindpirates.video.subs
 		 */
 		protected function handleSubtitleFileLoaded(event:Event):void
 		{
-			var file:SubtitleFileLoader = event.target as SubtitleFileLoader;
+			var file:SubsFileLoader = event.target as SubsFileLoader;
 			file.removeEventListener(Event.COMPLETE, handleSubtitleFileLoaded);
 			displaySubtitles(file);
 		}
@@ -251,15 +249,18 @@ package org.mindpirates.video.subs
 		 * Displays the subtitles of a loaded <code>SubtitleFileLoader</code>.
 		 * @param file A <code>SubtitleFileLoader</code> that contains the subtitles.
 		 */
-		private function displaySubtitles(file:SubtitleFileLoader):void
+		private function displaySubtitles(file:SubsFileLoader):void
 		{ 
 			_currentFile = file;
+			_currentSubtitleLine = null;
+			// start the timer
 			if (main.videoPlayer.isReady && !timer.running) {
 				timer.start();
 			}
-			var listIndex:int = ui.selectBox.getFileIndex( file );
+			// change the selected item of the selection combobox to display the new file 
+			var listIndex:int = view.ui.selectBox.getFileIndex( file );
 			if (listIndex > -1) {
-				ui.selectBox.selectedIndex = listIndex;
+				view.ui.selectBox.selectedIndex = listIndex;
 			}
 		}
 		 
@@ -273,7 +274,7 @@ package org.mindpirates.video.subs
 		*/
 		
 		/**
-		 * Creates the <code>timer</code> and registers the <code>TimerEvent.TIMER</code> event listener.
+		 * Creates the <code>timer</code> and registers the <code>TimerEvent.TIMER</code> event listener to update the view.
 		 * @see #timer
 		 */
 		private function createTimer():void
@@ -301,19 +302,39 @@ package org.mindpirates.video.subs
 		protected function handleTimer(event:TimerEvent):void
 		{
 			if (!_currentFile) {
+				_currentSubtitleLine = null;
 				return;
 			}
-			var file:SubtitleFileLoader = _currentFile;
+			
+			var file:SubsFileLoader = _currentFile;
 			var line:SubtitleLine = file.subtitles.getLineAtTime( main.videoPlayer.positionTime ); 
-			 
-			if (line) {
-				view.textfield.text = line.text;
+			
+			if ( (!line && !_currentSubtitleLine) || (line && line == _currentSubtitleLine)) {
+				return;
 			}
-			else {
-				view.textfield.text = '';
-			}
+			
+			setSubtitleLine(line);
+			
 		}
 		
+		private function setSubtitleLine(line:SubtitleLine):void
+		{
+			var event:SubtitleEvent = new SubtitleEvent( SubtitleEvent.LINE_CHANGED );
+			event.oldLine = _currentSubtitleLine;
+			
+			if (line) {
+				view.textField.text = line.text;
+				_currentSubtitleLine = line;
+				event.newLine = line;
+				event.text = line.text;
+			}
+			else {
+				view.textField.text = '';
+				_currentSubtitleLine = null;
+			}
+			
+			main.dispatchEvent( event );
+		}		
 		
 		/*
 		-------------------------------------------------------------------------------------

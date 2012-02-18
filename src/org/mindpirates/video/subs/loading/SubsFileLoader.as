@@ -21,7 +21,7 @@ package org.mindpirates.video.subs.loading
 	 * Offers named access to the node attrbutes and its value. Furtheron, it can load the actual subtitle file.
 	 * @see org.mindpirates.video.subtitleplayer.loading.SubtitlesListLoader
 	 */ 
-	public class SubtitleFileLoader extends EventDispatcher
+	public class SubsFileLoader extends EventDispatcher
 	{
 		/**
 		 * The xml from the subtitleList XML file.
@@ -37,7 +37,7 @@ package org.mindpirates.video.subs.loading
 		 * Proxy class for a node of the subtitleList XML file.
 		 * @param node [xml] A node from the XML listing of available subtitle files.
 		 */
-		public function SubtitleFileLoader(node:XML)
+		public function SubsFileLoader(node:XML)
 		{
 			xml = node;
 		}

@@ -15,7 +15,7 @@ package org.mindpirates.video.subs.view
 		/**
 		 * The ComboBox for selecting the subtitles file
 		 */
-		public var selectBox:SubtitlesSelectionCombo;
+		public var selectBox:SubsComboBox;
 		
 		/**
 		 * holds the value for <code>subtitles</code>
@@ -36,7 +36,7 @@ package org.mindpirates.video.subs.view
 			//_videoPlayer = subs.main.videoPlayer;
 			subs.main.videoPlayer.addEventListener(VideoPlayerEvent.PLAYER_READY, handlePlayerReady);
 			
-			selectBox = new SubtitlesSelectionCombo();
+			selectBox = new SubsComboBox();
 			addChild( selectBox );
 			
 			addEventListener(Event.ADDED_TO_STAGE, handleAdded);
