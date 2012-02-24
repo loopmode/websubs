@@ -3,6 +3,7 @@ package org.mindpirates.video.vimeo
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
+	import flash.events.MouseEvent;
 	import flash.utils.describeType;
 	
 	import org.mindpirates.video.IVideoPlayerUI;
@@ -15,42 +16,30 @@ package org.mindpirates.video.vimeo
 		{
 			moogaloop = player; 
 		}
-		
-		 
-		public function findChild(target:DisplayObjectContainer, className:String):DisplayObject
-		{
-			var i:int=0;
-			var result:DisplayObject;
-			while (i<target.numChildren) {
-				if (!result) {
-					if (target.getChildAt(i).toString() == '[object '+className+']') {
-						result = target.getChildAt(i) as Sprite;
-					}
-					else {
-						var container:DisplayObjectContainer = target.getChildAt(i) as DisplayObjectContainer;
-						if (container && !result) {
-							result = findChild(container, className);
-						}
-					}
-				}
-				i++;
-			}
-			return result;
-		}
 		 
 		public function get controlBar():Sprite
 		{
-			return findChild(moogaloop, 'VideoControlsView') as Sprite;
+			return findChild(moogaloop, 'VideoControlsView')[0] as Sprite;
 		}
 		
 		public function get playPauseButton():DisplayObject
 		{
-			return findChild(moogaloop, 'PlayPauseButton');
+			return findChild(moogaloop, 'PlayPauseButton')[0];
+		}
+		
+		public function get hdButton():DisplayObject
+		{
+			return findChild(moogaloop, 'HDButton')[0];
+		}
+		
+		internal function get hdIcon():Sprite
+		{ 
+			return findChild(DisplayObjectContainer(hdButton), 'HDIcon_SVGClass')[0]
 		}
 		
 		public function get fullscreenButton():DisplayObject
 		{
-			return null;
+			return findChild(moogaloop, 'FullscreenButton')[0];
 		}
 		
 		public function get seekSlider():DisplayObject

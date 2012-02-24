@@ -22,6 +22,7 @@ package org.mindpirates.video.subs.view
 			_file.addEventListener(SubtitleFileLoaderEvent.PROGRESS, showLoadingSubtitlesMessage);
 			_file.addEventListener(SubtitleFileLoaderEvent.FONT_LOAD, showLoadingFontMessage);
 			_file.addEventListener(SubtitleFileLoaderEvent.FONT_PROGRESS, showLoadingFontMessage);
+			_file.addEventListener(SubtitleFileLoaderEvent.FONT_COMPLETE, showCompleteMessage);
 			_file.addEventListener(SubtitleFileLoaderEvent.COMPLETE, showCompleteMessage);
 		}
 		

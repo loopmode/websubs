@@ -3,6 +3,7 @@ package org.mindpirates.video.subs.view
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.FullScreenEvent;
+	import flash.media.Video;
 	
 	import org.mindpirates.video.events.SubtitleEvent;
 	import org.mindpirates.video.events.VideoPlayerEvent;
@@ -27,9 +28,11 @@ package org.mindpirates.video.subs.view
 			_subs = target;
 			createTextField();
 			createUI();
+			
 			subs.main.videoPlayer.addEventListener(VideoPlayerEvent.PLAYER_READY, handlePlayerReady);
 			addEventListener(Event.ADDED_TO_STAGE, handleAdded);
 		}
+		
 		
 		public function destroy():void
 		{
@@ -131,8 +134,7 @@ package org.mindpirates.video.subs.view
 		public function addListeners():void
 		{
 			subs.main.addEventListener(SubtitleEvent.LINE_CHANGED, handleSubtitleLineChanged);
-			stage.addEventListener(Event.RESIZE, handleStageResize);
-			stage.addEventListener(FullScreenEvent.FULL_SCREEN, handleFullscreenChanged);
+			stage.addEventListener(Event.RESIZE, handleStageResize); 
 			addEventListener(Event.REMOVED_FROM_STAGE, handleRemoved);
 		}
 			
@@ -140,8 +142,7 @@ package org.mindpirates.video.subs.view
 		public function removeListeners():void
 		{
 			subs.main.removeEventListener(SubtitleEvent.LINE_CHANGED, handleSubtitleLineChanged);
-			stage.removeEventListener(Event.RESIZE, handleStageResize);
-			stage.removeEventListener(FullScreenEvent.FULL_SCREEN, handleFullscreenChanged);
+			stage.removeEventListener(Event.RESIZE, handleStageResize); 
 			removeEventListener(Event.REMOVED_FROM_STAGE, handleRemoved);
 		}
 		
@@ -165,12 +166,6 @@ package org.mindpirates.video.subs.view
 			layout();
 		}	
 		 
-		
-		public function handleFullscreenChanged(event:FullScreenEvent):void
-		{
-			layout();
-		}		
-		
 		public function handleStageResize(event:Event):void
 		{		
 			layout();
@@ -178,10 +173,12 @@ package org.mindpirates.video.subs.view
 		
 		public function layout():void
 		{
-			textField.width = stage.stageWidth - 20; 
 			textField.scaleX = textField.scaleY = subs.main.currentScale;
+			textField.width = stage.stageWidth - 20; 
+			
+			//var fontSize:Number = subs.main.currentScale * (subs.currentFile && subs.currentFile.fontSize ? subs.currentFile.fontSize : subs.main.flashVars.defaultFontSize);
 			textField.x = 0.5 * (stage.stageWidth - textField.width);
-			textField.y = stage.stageHeight - textField.textHeight - subs.main.currentScale * subs.main.flashVars.textfieldMarginBottom;
+			textField.y =  stage.stageHeight - textField.height - subs.main.flashVars.textfieldMarginBottom;
 		}
 		
 	}

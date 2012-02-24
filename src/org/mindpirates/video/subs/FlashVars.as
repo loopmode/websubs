@@ -22,7 +22,9 @@ package org.mindpirates.video.subs
 		/**
 		 * Constant. The default bottommargin value for the subtitle textfield. Used if no 'textfield_margin_bottom' value was defined in the flashvars of the HTML embed.
 		 */
-		public static const DEFAULT_TEXTFIELD_MARGIN_BOTTOM:Number = 60;
+		public static const DEFAULT_TEXTFIELD_MARGIN_BOTTOM:Number = 50;
+		
+		public static const DEFAULT_HD:String = "0";
 		
 		/*
 		--------------------------------------------------------------------------

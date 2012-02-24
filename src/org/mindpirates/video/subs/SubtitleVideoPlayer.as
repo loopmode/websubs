@@ -4,7 +4,7 @@ package org.mindpirates.video.subs
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
-	import flash.geom.Point; 
+	import flash.geom.Point;
 	
 	import net.stevensacks.preloaders.CircleSlicePreloader;
 	
@@ -42,7 +42,7 @@ package org.mindpirates.video.subs
 		 * The Subtitles instance.
 		 * @see org.mindpirates.video.subs.Subtitles
 		 */
-		private var subs:Subtitles;
+		public var subs:Subtitles;
 		
 		/**
 		 * The spinner shown while the videoPlayer is loading
@@ -64,6 +64,11 @@ package org.mindpirates.video.subs
 		public function SubtitleVideoPlayer()
 		{
 			super();
+			trace('------------------------------------------------')
+			trace(this)
+			trace(new Date());
+			trace('------------------------------------------------')
+			
 			flashVars = new FlashVars(loaderInfo.parameters);
 			addEventListener(Event.ADDED_TO_STAGE, handleAdded);
 		}

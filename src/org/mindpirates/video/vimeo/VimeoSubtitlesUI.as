@@ -8,6 +8,7 @@ package org.mindpirates.video.vimeo
 	import flash.events.TimerEvent;
 	import flash.filters.DropShadowFilter;
 	import flash.geom.Point;
+	import flash.media.Video;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
@@ -37,8 +38,11 @@ package org.mindpirates.video.vimeo
 		public function VimeoSubtitlesUI(target:Subtitles)
 		{
 			super(target); 
+			moogaloop.addEventListener(VideoPlayerEvent.PLAY_PROGRESS, handlePlaybackStartedOnce);
 		}
-		 
+		
+		
+		
 		
 		/*
 		--------------------------------------------------------------------------
@@ -47,7 +51,8 @@ package org.mindpirates.video.vimeo
 		
 		--------------------------------------------------------------------------
 		*/
-		 
+		
+		
 		/**
 		 * Checks the opacity of the moogaloop UI and applies it to itself.<br>
 		 * When there was no user input for a while, moogaloop fades out its UI, and our subtitles UI must respond to that.
@@ -65,7 +70,8 @@ package org.mindpirates.video.vimeo
 		
 		/**
 		 * Applies a delayed <code>layout()</code> call based on the <code>FULLSCREEN_LAYOUT_DELAY</code> value.<br>
-		 * Moogaloop seems to have a delayed layout function itself, as the UI positions seem incorrect immediatly after the fullscreen event.
+		 * Moogaloop seems to have a delayed layout function itself, and the UI positions are not correct directly after the fullscreen event.
+		 * As a workaround, we set a delayed call to our layout function.
 		 * @see #FULLSCREEN_LAYOUT_DELAY
 		 */
 		override public function handleFullscreenChanged(event:FullScreenEvent):void
@@ -78,6 +84,21 @@ package org.mindpirates.video.vimeo
 			}, false, 0, true);
 			t.start();	
 		}
+		
+		
+		/**
+		 * Adds the subtitles textfield above the video but below the player controls, so that the textfield does not block mouse interactions with the controls.
+		 * Executes once as soon as the VideoController class is instantioated within moogaloop. 
+		 */
+		protected function handlePlaybackStartedOnce(event:Event):void
+		{  
+			var videoController:Sprite = findChild(moogaloop, 'VideoController')[0]; 
+			if (videoController) {
+				moogaloop.removeEventListener(VideoPlayerEvent.PLAY_PROGRESS, handlePlaybackStartedOnce);
+				videoController.addChild(subs.view.textField);
+			}
+		}	
+		
 		
 		override public function layout():void
 		{

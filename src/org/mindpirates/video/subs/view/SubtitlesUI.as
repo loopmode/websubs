@@ -53,9 +53,7 @@ package org.mindpirates.video.subs.view
 			
 			_subs = target;
 			
-			//_videoPlayer = subs.main.videoPlayer;
 			subs.main.videoPlayer.addEventListener(VideoPlayerEvent.PLAYER_READY, handlePlayerReady);
-			
 			
 			comboBox = new SubsComboBox();  
 			comboBox.height = comboBox.dropdown.rowHeight = 17; 

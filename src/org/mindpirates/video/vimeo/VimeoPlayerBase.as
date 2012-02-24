@@ -13,6 +13,7 @@ package org.mindpirates.video.vimeo
 	import flash.system.LoaderContext;
 	import flash.system.Security;
 	import flash.utils.Timer;
+	import flash.utils.describeType;
 	
 	import org.mindpirates.video.VideoPlayerBase;
 	
@@ -219,7 +220,8 @@ package org.mindpirates.video.vimeo
 				{
 					stage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMove, false, 0, true);
 				}
-				 
+				
+				//trace(describeType(moogaloop));
 				playerLoaded();
 			}
 		}
@@ -277,6 +279,15 @@ package org.mindpirates.video.vimeo
 			seekTo(0);
 			doPause();
 		}
+		
+		/**
+		 * Returns the hilight color of the player.
+		 */
+		public function getColor():*
+		{
+			return uint(moogaloop.color);
+		}
+		
 		
 		/**
 		 * returns duration of video in seconds

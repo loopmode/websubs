@@ -62,9 +62,10 @@ package org.mindpirates.video.subs.loading
 		public var xml:XML;
 		  
 		private var _data:Object;
-		private var _isLoaded:Boolean;
+		private var _isLoaded:Boolean = false;
+		private var _fontLoaded:Boolean = false;
 		private var _subtitles:SubtitlesFileData;
-		private var _fontLoaded:Boolean;
+		private var _dispatchCompleteWhenFontLoaded:Boolean;
 		 
 		/** 
 		 * Proxy class for a node of the subtitleList XML file.
@@ -166,8 +167,13 @@ package org.mindpirates.video.subs.loading
 		 */
 		public function load():void
 		{
-			trace(this, 'load()', fileURL);
-			_isLoaded = false;
+			trace('--------------------', this, '-------------------------');
+			if (_isLoaded && _fontLoaded) {
+				trace(this, fileURL, ' already loaded');
+				dispatchEvent( new SubtitleFileLoaderEvent( SubtitleFileLoaderEvent.COMPLETE ) );
+				return;
+			}
+			trace(this, 'load()', fileURL); 
 			var loader:URLLoader = new URLLoader();
 			loader.addEventListener(Event.COMPLETE, handleLoadComplete);
 			loader.addEventListener(ProgressEvent.PROGRESS, handleLoadProgress);
@@ -196,7 +202,7 @@ package org.mindpirates.video.subs.loading
 			switch (format) {
 				case SubtitleFormats.SRT:
 					var lines:Array = SubtitleParser.parseSRT( String(_data) );
-					trace('parsed '+lines.length+' subtitle lines');
+					trace(this, 'parsed '+lines.length+' subtitle lines');
 					_subtitles = new SubtitlesFileData(lines, fileURL);	
 			}
 			
@@ -208,10 +214,19 @@ package org.mindpirates.video.subs.loading
 			}
 		}
 		
-		private function loadFont():void
+		public function reloadFont():void
+		{
+			loadFont(false);
+		}
+		private function loadFont(dispatchComplete:Boolean=true):void
 		{ 
-			trace('loadFont', fontFile);
 			_fontLoaded = false;
+			_dispatchCompleteWhenFontLoaded = dispatchComplete;
+			if (!fontFile) {
+				trace(this, 'loadFont()', 'No font specified for this subtitle file');
+				return;
+			}
+			trace(this, 'loadFont', fontFile);
 			var loader:FontLoader = new FontLoader();
 			loader.addEventListener(Event.COMPLETE, handleFontLoaded); 
 			loader.addEventListener(ProgressEvent.PROGRESS, handleFontProgress);
@@ -229,13 +244,16 @@ package org.mindpirates.video.subs.loading
 		
 		protected function handleFontLoaded(event:Event):void
 		{
-			trace('handleFontLoaded', fontFile);
+			trace(this, 'handleFontLoaded', fontFile);
 			_fontLoaded = true;
 			var loader:FontLoader = event.target as FontLoader;
 			loader.removeEventListener(ProgressEvent.PROGRESS, handleFontProgress);
 			loader.removeEventListener(Event.COMPLETE, handleFontLoaded);
+			loader.destroy();
 			dispatchEvent( new SubtitleFileLoaderEvent( SubtitleFileLoaderEvent.FONT_COMPLETE ) );	
-			dispatchEvent( new SubtitleFileLoaderEvent( SubtitleFileLoaderEvent.COMPLETE ) );	
+			if (_dispatchCompleteWhenFontLoaded) {
+				dispatchEvent( new SubtitleFileLoaderEvent( SubtitleFileLoaderEvent.COMPLETE ) );
+			}
 		}		
 		 
 	}

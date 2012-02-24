@@ -157,6 +157,11 @@ package org.mindpirates.video.subs.view
 			return _fontSize;
 		}
 		
+		
+		
+		
+		
+		
 		private var _scale:Number; 
 		
 		public function set scale(value:Number):void

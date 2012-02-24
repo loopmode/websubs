@@ -1,8 +1,12 @@
 package org.mindpirates.video.vimeo
 {
-	import org.mindpirates.video.subs.VideoServices;
+	import flash.display.Sprite;
+	import flash.events.Event;
+	import flash.media.Video;
+	
 	import org.mindpirates.video.events.VideoPlayerEvent;
 	import org.mindpirates.video.subs.SubtitleVideoPlayer;
+	import org.mindpirates.video.subs.VideoServices;
 	
 	
 	[SWF(width="640", height="360", backgroundColor="0x000000")]
@@ -28,8 +32,10 @@ package org.mindpirates.video.vimeo
 			var h:Number 				= stage.stageHeight;
 			var fp_version:String 		= '11';
 			videoPlayer = new VimeoPlayer(oauth, clip_id, w, h, fp_version);
+			videoPlayer.addEventListener(VideoPlayerEvent.PLAYER_READY, handlePlayerReady);
 			addChild(videoPlayer.displayObject);
 			super.createPlayer();
 		}
+		 
 	}
 }

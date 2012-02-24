@@ -67,6 +67,10 @@ package org.mindpirates.video.vimeo
 			return _ui;
 		}
 		
+		public function get hdEnabled():Boolean
+		{ 
+			return getColor() == uint(_ui.hdIcon.transform.colorTransform.color); 
+		}
 		
 		/**
 		 *  
@@ -88,7 +92,7 @@ package org.mindpirates.video.vimeo
 		{
 			_ui = new VimeoPlayerUI( moogaloop as Sprite );
 			_isReady = true;
-			dispatchEvent( createVideoPlayerEvent( VideoPlayerEvent.PLAYER_READY ) );
+			dispatchEvent( createVideoPlayerEvent( VideoPlayerEvent.PLAYER_READY ) ); 			
 		}
 	 
 		
