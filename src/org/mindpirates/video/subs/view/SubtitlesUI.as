@@ -1,10 +1,27 @@
 package org.mindpirates.video.subs.view
 {
+	import com.greensock.TweenLite;
+	
+	import embed.fonts.EmbeddedFonts;
+	
+	import fl.controls.Button;
 	import fl.controls.ComboBox;
 	
+	import flash.display.DisplayObject;
+	import flash.display.Graphics;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.FullScreenEvent;
+	import flash.events.MouseEvent;
+	import flash.filters.DropShadowFilter;
+	import flash.text.AntiAliasType;
+	import flash.text.Font;
+	import flash.text.TextField;
+	import flash.text.TextFieldAutoSize;
+	import flash.text.TextFormat;
+	import flash.text.TextFormatAlign;
+	
+	import net.stevensacks.preloaders.CircleSlicePreloader;
 	
 	import org.mindpirates.video.VideoPlayerBase;
 	import org.mindpirates.video.events.VideoPlayerEvent;
@@ -15,7 +32,7 @@ package org.mindpirates.video.subs.view
 		/**
 		 * The ComboBox for selecting the subtitles file
 		 */
-		public var selectBox:SubsComboBox;
+		public var comboBox:SubsComboBox;
 		
 		/**
 		 * holds the value for <code>subtitles</code>
@@ -24,6 +41,9 @@ package org.mindpirates.video.subs.view
 		private var _subs:Subtitles;
 		
 		//private var _videoPlayer:VideoPlayerBase;
+		 
+		public var statusTextfield:TextField;
+		  
 		
 		public function SubtitlesUI(target:Subtitles)
 		{
@@ -36,14 +56,16 @@ package org.mindpirates.video.subs.view
 			//_videoPlayer = subs.main.videoPlayer;
 			subs.main.videoPlayer.addEventListener(VideoPlayerEvent.PLAYER_READY, handlePlayerReady);
 			
-			selectBox = new SubsComboBox();
-			addChild( selectBox );
+			
+			comboBox = new SubsComboBox();  
+			comboBox.height = comboBox.dropdown.rowHeight = 17; 
+			addChild(comboBox);
 			
 			addEventListener(Event.ADDED_TO_STAGE, handleAdded);
 			
 		}
 		 
-		
+		 
 		/**
 		 * Destroys the instance and removes all event listeners.
 		 */
@@ -130,6 +152,43 @@ package org.mindpirates.video.subs.view
 			layout();
 		}
 		
+		public function set statusMessage(value:String):void
+		{ 
+			if (value) {
+				if (!statusTextfield) {
+					createStatusTextfield();
+				} 
+				statusTextfield.text = value;
+				statusTextfield.alpha = 0.3;
+			}
+			else {
+				TweenLite.to(statusTextfield, 1, {alpha:0});
+			}
+		}
+		
+		public function createStatusTextfield():void
+		{
+			statusTextfield = new TextField();
+			var format:TextFormat = new TextFormat();
+			format.size = 8;
+			format.font = EmbeddedFonts.UNI_05_53;
+			format.color = 0xFFFFFF; 
+			statusTextfield.embedFonts = true;
+			statusTextfield.selectable = false;
+			statusTextfield.multiline = false;
+			statusTextfield.filters = [new DropShadowFilter()];
+			statusTextfield.defaultTextFormat = format;
+			statusTextfield.autoSize = TextFieldAutoSize.LEFT;
+			statusTextfield.x = 5;
+			addChild(statusTextfield); 
+		}
+		public function get statusMessage():String
+		{ 
+			if (statusTextfield) {
+				return statusTextfield.text;
+			}
+			return null;
+		}
 		/*
 		--------------------------------------------------------------------------
 		

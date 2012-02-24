@@ -17,12 +17,12 @@ package org.mindpirates.video.subs
 		/**
 		 * Constant. Contains the default font size, if no 'default_fontsize' value was defined in the flashvars of the HTML embed.
 		 */
-		public static const DEFAULT_FONTSIZE:int = 15;
+		public static const DEFAULT_FONTSIZE:int = 17;
 		 
 		/**
 		 * Constant. The default bottommargin value for the subtitle textfield. Used if no 'textfield_margin_bottom' value was defined in the flashvars of the HTML embed.
 		 */
-		public static const DEFAULT_TEXTFIELD_MARGIN_BOTTOM:Number = 50;
+		public static const DEFAULT_TEXTFIELD_MARGIN_BOTTOM:Number = 60;
 		
 		/*
 		--------------------------------------------------------------------------

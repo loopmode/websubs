@@ -2,9 +2,11 @@ package org.mindpirates.video.subs.loading
 {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.events.ProgressEvent;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	
+	import org.mindpirates.video.events.SubtitleFileLoaderEvent;
 	import org.mindpirates.video.subs.SubtitleFormats;
 	import org.mindpirates.video.subs.SubtitleParser;
 	import org.mindpirates.video.subs.SubtitlesFileData;
@@ -13,17 +15,46 @@ package org.mindpirates.video.subs.loading
 	
 	/** 
 	 * Dispatched when the subtitle file has been loaded.
-	 * @eventType flash.events.Event
+	 * @eventType org.mindpirates.video.events.SubsFileLoaderEvent
 	 */
-	[Event(name="complete", type="flash.events.Event")]
+	[Event(name="load", type="org.mindpirates.video.events.SubtitleFileLoaderEvent")]
 	
+	/** 
+	 * Dispatched while the subtitle file is loading.
+	 * @eventType org.mindpirates.video.events.SubsFileLoaderEvent
+	 */
+	[Event(name="progress", type="org.mindpirates.video.events.SubtitleFileLoaderEvent")]
+	
+	/** 
+	 * Dispatched when the subtitle file has been loaded.
+	 * @eventType org.mindpirates.video.events.SubsFileLoaderEvent
+	 */
+	[Event(name="complete", type="org.mindpirates.video.events.SubtitleFileLoaderEvent")]
+	
+	/** 
+	 * Dispatched when the font file begins loading.
+	 * @eventType org.mindpirates.video.events.SubsFileLoaderEvent
+	 */
+	[Event(name="loadFont", type="org.mindpirates.video.events.SubtitleFileLoaderEvent")]
+	
+	/** 
+	 * Dispatched while the font file is loading.
+	 * @eventType org.mindpirates.video.events.SubsFileLoaderEvent
+	 */
+	[Event(name="fontProgress", type="org.mindpirates.video.events.SubtitleFileLoaderEvent")]
+	
+	/** 
+	 * Dispatched when the font file has been loaded.
+	 * @eventType org.mindpirates.video.events.SubsFileLoaderEvent
+	 */
+	[Event(name="fontComplete", type="org.mindpirates.video.events.SubtitleFileLoaderEvent")]
 	
 	/**
 	 * Represents a subtitle file based on a node of the XML file loaded by <code>SubtitleListLoader</code>.<br>
 	 * Offers named access to the node attrbutes and its value. Furtheron, it can load the actual subtitle file.
 	 * @see org.mindpirates.video.subtitleplayer.loading.SubtitlesListLoader
 	 */ 
-	public class SubsFileLoader extends EventDispatcher
+	public class SubtitleFileLoader extends EventDispatcher
 	{
 		/**
 		 * The xml from the subtitleList XML file.
@@ -33,12 +64,13 @@ package org.mindpirates.video.subs.loading
 		private var _data:Object;
 		private var _isLoaded:Boolean;
 		private var _subtitles:SubtitlesFileData;
+		private var _fontLoaded:Boolean;
 		 
 		/** 
 		 * Proxy class for a node of the subtitleList XML file.
 		 * @param node [xml] A node from the XML listing of available subtitle files.
 		 */
-		public function SubsFileLoader(node:XML)
+		public function SubtitleFileLoader(node:XML)
 		{
 			xml = node;
 		}
@@ -138,7 +170,17 @@ package org.mindpirates.video.subs.loading
 			_isLoaded = false;
 			var loader:URLLoader = new URLLoader();
 			loader.addEventListener(Event.COMPLETE, handleLoadComplete);
+			loader.addEventListener(ProgressEvent.PROGRESS, handleLoadProgress);
 			loader.load( new URLRequest( fileURL) );
+			dispatchEvent( new SubtitleFileLoaderEvent( SubtitleFileLoaderEvent.LOAD ) );
+		}
+		
+		protected function handleLoadProgress(event:ProgressEvent):void
+		{
+			var e:SubtitleFileLoaderEvent = new SubtitleFileLoaderEvent( SubtitleFileLoaderEvent.PROGRESS );
+			e.bytesLoaded = event.bytesLoaded;
+			e.bytesTotal = event.bytesTotal;
+			dispatchEvent( e );
 		}
 		
 		protected function handleLoadComplete(event:Event):void
@@ -146,6 +188,7 @@ package org.mindpirates.video.subs.loading
 			trace(this, 'loaded:', fileURL);
 			var loader:URLLoader = event.target as URLLoader;
 			loader.removeEventListener(Event.COMPLETE, handleLoadComplete);	
+			loader.removeEventListener(ProgressEvent.PROGRESS, handleLoadProgress);
 			_data = loader.data;
 			_isLoaded = true;
 			
@@ -156,27 +199,43 @@ package org.mindpirates.video.subs.loading
 					trace('parsed '+lines.length+' subtitle lines');
 					_subtitles = new SubtitlesFileData(lines, fileURL);	
 			}
-			trace('fontFile', fontFile);
-			if(fontFile) {
+			
+			if (fontFile) {
 				loadFont();			
 			}
 			else {
-				dispatchEvent( new Event( Event.COMPLETE ) );					
+				dispatchEvent( new SubtitleFileLoaderEvent( SubtitleFileLoaderEvent.COMPLETE ) );					
 			}
 		}
 		
 		private function loadFont():void
 		{ 
+			trace('loadFont', fontFile);
+			_fontLoaded = false;
 			var loader:FontLoader = new FontLoader();
 			loader.addEventListener(Event.COMPLETE, handleFontLoaded); 
+			loader.addEventListener(ProgressEvent.PROGRESS, handleFontProgress);
 			loader.load(new URLRequest(fontFile));
+			dispatchEvent( new SubtitleFileLoaderEvent( SubtitleFileLoaderEvent.FONT_LOAD ) );	
+		}
+		
+		protected function handleFontProgress(event:ProgressEvent):void
+		{
+			var e:SubtitleFileLoaderEvent = new SubtitleFileLoaderEvent( SubtitleFileLoaderEvent.FONT_PROGRESS );
+			e.bytesLoaded = event.bytesLoaded;
+			e.bytesTotal = event.bytesTotal;
+			dispatchEvent( e );
 		}
 		
 		protected function handleFontLoaded(event:Event):void
 		{
+			trace('handleFontLoaded', fontFile);
+			_fontLoaded = true;
 			var loader:FontLoader = event.target as FontLoader;
+			loader.removeEventListener(ProgressEvent.PROGRESS, handleFontProgress);
 			loader.removeEventListener(Event.COMPLETE, handleFontLoaded);
-			dispatchEvent( new Event( Event.COMPLETE ) );	
+			dispatchEvent( new SubtitleFileLoaderEvent( SubtitleFileLoaderEvent.FONT_COMPLETE ) );	
+			dispatchEvent( new SubtitleFileLoaderEvent( SubtitleFileLoaderEvent.COMPLETE ) );	
 		}		
 		 
 	}

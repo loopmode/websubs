@@ -1,10 +1,17 @@
 package org.mindpirates.video.vimeo
 {
+	import embed.fonts.EmbeddedFonts;
+	
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.FullScreenEvent;
 	import flash.events.TimerEvent;
+	import flash.filters.DropShadowFilter;
 	import flash.geom.Point;
+	import flash.text.TextField;
+	import flash.text.TextFieldAutoSize;
+	import flash.text.TextFormat;
+	import flash.text.TextFormatAlign;
 	import flash.utils.Timer;
 	
 	import org.mindpirates.video.VideoPlayerBase;
@@ -40,7 +47,7 @@ package org.mindpirates.video.vimeo
 		
 		--------------------------------------------------------------------------
 		*/
-		
+		 
 		/**
 		 * Checks the opacity of the moogaloop UI and applies it to itself.<br>
 		 * When there was no user input for a while, moogaloop fades out its UI, and our subtitles UI must respond to that.
@@ -76,25 +83,26 @@ package org.mindpirates.video.vimeo
 		{
 			super.layout();
 			
-			// set the comboBox position right above moogaloop's play button
+			// set the comboWrapper position right above moogaloop's play button
 			try {
-				selectBox.x = moogaloop.ui.controlBar.x + moogaloop.ui.playPauseButton.x;
-				selectBox.y = moogaloop.ui.playPauseButton.y - selectBox.height - 5;
+				comboBox.x = moogaloop.ui.controlBar.x + moogaloop.ui.playPauseButton.x;
+				comboBox.y = moogaloop.ui.playPauseButton.y - comboBox.height - 5;
 			}
 			catch (err:Error) {
 				// when leaving fullscreen mode, an error is thrown when trying to access moogaloop's UI elements.
 				// therefore, we use cached values of the position
 				if (_initialSelectBoxPosition) {
-					selectBox.x = _initialSelectBoxPosition.x;
-					selectBox.y = _initialSelectBoxPosition.y;
+					comboBox.x = _initialSelectBoxPosition.x;
+					comboBox.y = _initialSelectBoxPosition.y;
 				}
 			}
 			
 			if (!_initialSelectBoxPosition) {
-				_initialSelectBoxPosition = new Point(selectBox.x, selectBox.y);
+				_initialSelectBoxPosition = new Point(comboBox.x, comboBox.y);
 			}
 		}
 		
+		 
 		/*
 		--------------------------------------------------------------------------
 		

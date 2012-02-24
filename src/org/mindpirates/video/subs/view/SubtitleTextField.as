@@ -1,6 +1,6 @@
 package org.mindpirates.video.subs.view
 {
-	import embed.fonts.Fonts;
+	import embed.fonts.EmbeddedFonts;
 	
 	import flash.filters.DropShadowFilter;
 	import flash.filters.GlowFilter;
@@ -46,7 +46,7 @@ package org.mindpirates.video.subs.view
 			 
 			_subs = target;
 			 
-			defaultFontName = Fonts.DejaVu;
+			defaultFontName = EmbeddedFonts.DejaVu;
 			defaultFontSize = subs.main.flashVars.defaultFontSize;
 			
 			_fontName = defaultFontName;
@@ -139,7 +139,7 @@ package org.mindpirates.video.subs.view
 			});  
 			 
 			styleSheet = ss;	
-			trace(_text);
+			//trace(_text);
 			htmlText = _text;
 		}
 		

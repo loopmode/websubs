@@ -47,7 +47,17 @@ package utils {
 			if (p_string == null) { return ''; }
 			return p_string.replace(/^\s+|\s+$/g, '');
 		}
-		 
+		
+		/**
+		 * Returns the part of a string after the last occurance of a slash.
+		 */
+		public static function getFileName(value:String):String
+		{
+			if (value.indexOf('/') == -1) {
+				return value;
+			}
+			return value.substr(value.lastIndexOf('/')+1, value.length);
+		}
 		
 	}
 }

@@ -2,11 +2,11 @@ package embed.fonts
 {
 	import flash.text.Font;
 	
-	public class Fonts
+	public class EmbeddedFonts
 	{
 		
 		
-		public function Fonts()
+		public function EmbeddedFonts()
 		{ 
 		}
 		

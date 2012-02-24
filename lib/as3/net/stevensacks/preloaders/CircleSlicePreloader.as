@@ -1,9 +1,11 @@
 ﻿package net.stevensacks.preloaders
 {
-	import flash.events.TimerEvent;
-	import flash.events.Event;
-	import flash.display.Sprite;
+	import com.greensock.TweenLite;
+	
 	import flash.display.Shape;
+	import flash.display.Sprite;
+	import flash.events.Event;
+	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 	
 	public class CircleSlicePreloader extends Sprite
@@ -67,6 +69,16 @@
 		{ 
 			removeEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
 			removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+		}
+		public function hide():void
+		{
+			TweenLite.to(this, 1, {alpha:0,onComplete:this.onHideComplete});
+		}
+		private function onHideComplete():void
+		{
+			if (parent) {
+				parent.removeChild(this);
+			}
 		}
 	}
 }
