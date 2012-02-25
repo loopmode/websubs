@@ -95,7 +95,7 @@ package org.mindpirates.video.vimeo
 			var videoController:Sprite = findChild(moogaloop, 'VideoController')[0]; 
 			if (videoController) {
 				moogaloop.removeEventListener(VideoPlayerEvent.PLAY_PROGRESS, handlePlaybackStartedOnce);
-				videoController.addChild(subs.view.textField);
+				videoController.addChild(subs.view.subtitlesTextField);
 			}
 		}	
 		

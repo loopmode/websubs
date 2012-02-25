@@ -43,6 +43,7 @@ package org.mindpirates.video.subs.view
 			addEventListener(Event.CHANGE, handleChange);
 			addEventListener(MouseEvent.ROLL_OVER, handleRollOver);
 			addEventListener(MouseEvent.ROLL_OUT, handleRollOut);
+			
 		}
 		
 		protected function handleRollOver(event:MouseEvent):void
@@ -53,6 +54,7 @@ package org.mindpirates.video.subs.view
 		protected function handleRollOut(event:MouseEvent):void
 		{
 			label.backgroundColor = 0x111A19;
+			
 		}
 		
 		private function createLabel():void

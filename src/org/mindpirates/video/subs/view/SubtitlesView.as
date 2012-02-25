@@ -1,14 +1,23 @@
 package org.mindpirates.video.subs.view
 {
+	import com.greensock.TweenLite;
+	
+	import embed.fonts.EmbeddedFonts;
+	
 	import flash.display.Sprite;
 	import flash.events.Event;
-	import flash.events.FullScreenEvent;
-	import flash.media.Video;
+	import flash.filters.DropShadowFilter;
+	import flash.text.TextField;
+	import flash.text.TextFieldAutoSize;
+	import flash.text.TextFormat;
+	import flash.text.TextFormatAlign;
 	
 	import org.mindpirates.video.events.SubtitleEvent;
+	import org.mindpirates.video.events.SubtitleFileLoaderEvent;
 	import org.mindpirates.video.events.VideoPlayerEvent;
 	import org.mindpirates.video.subs.Subtitles;
 	import org.mindpirates.video.subs.VideoServices;
+	import org.mindpirates.video.subs.loading.SubtitleFileLoader;
 	import org.mindpirates.video.vimeo.VimeoSubtitlesUI;
 	
 	/**
@@ -16,9 +25,12 @@ package org.mindpirates.video.subs.view
 	 */
 	public class SubtitlesView extends Sprite
 	{
-		private var _textfield:SubtitleTextField;
+		private var _subtitlesTextField:SubtitleTextField;
+		private var _statusTextField:TextField;
 		private var _ui:SubtitlesUI;
 		private var _subs:Subtitles;
+		private var statusWatcher:StatusWatcher;
+		
 		
 		public function SubtitlesView(target:Subtitles)
 		{
@@ -30,9 +42,22 @@ package org.mindpirates.video.subs.view
 			createUI();
 			
 			subs.main.videoPlayer.addEventListener(VideoPlayerEvent.PLAYER_READY, handlePlayerReady);
+			subs.main.addEventListener(SubtitleEvent.FILE_LOAD, handleFileload);
 			addEventListener(Event.ADDED_TO_STAGE, handleAdded);
 		}
 		
+		protected function handleFileload(event:SubtitleEvent):void
+		{
+			event.file.addEventListener(SubtitleFileLoaderEvent.COMPLETE, handleFileLoaded);
+			statusWatcher = new StatusWatcher(subs, event.file);
+		}		
+		
+		protected function handleFileLoaded(event:Event):void
+		{
+			var file:SubtitleFileLoader = event.target as SubtitleFileLoader;
+			file.addEventListener(SubtitleFileLoaderEvent.COMPLETE, handleFileLoaded);
+			statusWatcher.destroy();
+		}
 		
 		public function destroy():void
 		{
@@ -72,10 +97,53 @@ package org.mindpirates.video.subs.view
 		 * The textfield that is used to display the subtitles.
 		 * @see org.mindpirates.video.subs.view.SubtitleTextField
 		 */
-		public function get textField():SubtitleTextField
+		public function get subtitlesTextField():SubtitleTextField
 		{
-			return _textfield;
+			return _subtitlesTextField;
 		}
+		
+		/**
+		 * The textfield that is used to display the status messages.
+		 */
+		public function get statusTextField():TextField
+		{
+			return _statusTextField;
+		}
+		
+		
+		/*
+		--------------------------------------------------------------------------
+		
+		STATUS TEXT
+		
+		--------------------------------------------------------------------------
+		*/
+		
+		
+		
+		public function set statusMessage(value:String):void
+		{ 
+			if (value) {
+				if (!_statusTextField) {
+					createStatusTextfield();
+				} 
+				_statusTextField.text = value;
+				_statusTextField.alpha = 1;
+			}
+			else {
+				TweenLite.to(_statusTextField, 1, {alpha:0});
+			}
+		}
+	
+		public function get statusMessage():String
+		{ 
+			if (_statusTextField) {
+				return _statusTextField.text;
+			}
+			return null;
+		}
+		
+		
 		
 		
 		/*
@@ -86,14 +154,34 @@ package org.mindpirates.video.subs.view
 		--------------------------------------------------------------------------
 		*/
 		
+		public function createStatusTextfield():void
+		{
+			_statusTextField = new TextField();
+			var format:TextFormat = new TextFormat();
+			format.size = 8;
+			format.font = EmbeddedFonts.UNI_05_53;
+			format.color = 0xFFFFFF; 
+			format.align = TextFormatAlign.LEFT;
+			_statusTextField.embedFonts = true;
+			_statusTextField.selectable = false;
+			_statusTextField.multiline = false;
+			_statusTextField.filters = [new DropShadowFilter(4,45,0,0.5)];
+			_statusTextField.defaultTextFormat = format;
+			_statusTextField.autoSize = TextFieldAutoSize.LEFT;
+			_statusTextField.x = 5;
+			_statusTextField.y = 5;
+			addChild(_statusTextField); 
+		}
+		
+		
 		/** 
 		 * creates the textfield
 		 * @see #textField
 		 */
 		private function createTextField():void
 		{
-			_textfield = new SubtitleTextField(_subs);
-			addChild(_textfield);
+			_subtitlesTextField = new SubtitleTextField(_subs);
+			addChild(_subtitlesTextField);
 		}
 		
 		/**
@@ -173,12 +261,12 @@ package org.mindpirates.video.subs.view
 		
 		public function layout():void
 		{
-			textField.scaleX = textField.scaleY = subs.main.currentScale;
-			textField.width = stage.stageWidth - 20; 
+			subtitlesTextField.scaleX = subtitlesTextField.scaleY = subs.main.currentScale;
+			subtitlesTextField.width = stage.stageWidth - 20; 
 			
 			//var fontSize:Number = subs.main.currentScale * (subs.currentFile && subs.currentFile.fontSize ? subs.currentFile.fontSize : subs.main.flashVars.defaultFontSize);
-			textField.x = 0.5 * (stage.stageWidth - textField.width);
-			textField.y =  stage.stageHeight - textField.height - subs.main.flashVars.textfieldMarginBottom;
+			subtitlesTextField.x = 0.5 * (stage.stageWidth - subtitlesTextField.width);
+			subtitlesTextField.y =  stage.stageHeight - subtitlesTextField.height - subs.main.flashVars.textfieldMarginBottom;
 		}
 		
 	}

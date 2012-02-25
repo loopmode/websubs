@@ -106,5 +106,9 @@ package org.mindpirates.video.subs
 			return data['textfield_margin_bottom'] ? int(data['textfield_margin_bottom']) : DEFAULT_TEXTFIELD_MARGIN_BOTTOM;
 		}
 		
+		public function get autoPlay():Boolean
+		{
+			return data['autoplay'] === 'true' || data['autoplay'] === '1' ||  data['autoplay'] === true || data['autoplay'] === 1;
+		}
 	}
 }

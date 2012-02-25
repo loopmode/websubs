@@ -3,10 +3,26 @@ package org.mindpirates.video.events
 	import flash.events.Event;
 	
 	import org.mindpirates.video.subs.SubtitleLine;
+	import org.mindpirates.video.subs.loading.SubtitleFileLoader;
 	
 	public class SubtitleEvent extends Event
 	{
+		
+		/**
+		 * Dispatched when the subtitle text line changes
+		 */
 		public static const LINE_CHANGED:String = "lineChanged";
+		
+		
+		/**
+		 * Dispatched when a subtitle file begins loading
+		 */
+		public static const FILE_LOAD:String = "fileLoad";
+		
+		/**
+		 * The subtitle file loader
+		 */
+		public var file:SubtitleFileLoader;
 		
 		/**
 		 * The previously displayed line.

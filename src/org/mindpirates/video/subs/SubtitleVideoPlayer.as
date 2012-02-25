@@ -13,14 +13,24 @@ package org.mindpirates.video.subs
 	import org.mindpirates.video.vimeo.VimeoAuth;
 	import org.mindpirates.video.vimeo.VimeoPlayer;
 	
+	
 	/**
-	 * Dispatched when the player has been loaded.
-	 * @eventType org.mindpirates.video.events.VideoPlayerEvent
+	 * Dispatched when a new subtitle file is loaded.
+	 * @eventType org.mindpirates.video.events.SubtitleEvent
+	 */
+	[Event(name="fileLoad", type="org.mindpirates.video.events.SubtitleEvent")]
+	
+	
+	/**
+	 * Dispatched when a new subtitle line is displayed.
+	 * @eventType org.mindpirates.video.events.SubtitleEvent
 	 */
 	[Event(name="lineChanged", type="org.mindpirates.video.events.SubtitleEvent")]
 	
+	
 	/**
 	 * The <code>SubtitleVideoPlayer</code> class adds subtitle support to a videoplayer class.<br>
+	 * It implements a <code>Subtitles</code> instance which dispatches events on the SubtitleVideoPlayer.
 	 * @see #videoPlayer videoPlayer
 	 * @author Jovica Aleksic
 	 */
@@ -182,6 +192,9 @@ package org.mindpirates.video.subs
 		{ 
 			videoPlayer.removeEventListener(VideoPlayerEvent.PLAYER_READY, handlePlayerReady);
 			hideSpinner();
+			if (flashVars.autoPlay) {
+				videoPlayer.play();
+			}
 		}
 		
 		private function destroyPlayer():void

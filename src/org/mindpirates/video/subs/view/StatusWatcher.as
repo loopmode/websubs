@@ -1,6 +1,10 @@
 package org.mindpirates.video.subs.view
 {
+	import flash.display.Stage;
+	import flash.display.StageDisplayState;
 	import flash.events.Event;
+	import flash.events.FullScreenEvent;
+	import flash.text.TextField;
 	
 	import org.mindpirates.video.events.SubtitleFileLoaderEvent;
 	import org.mindpirates.video.subs.Strings;
@@ -24,7 +28,20 @@ package org.mindpirates.video.subs.view
 			_file.addEventListener(SubtitleFileLoaderEvent.FONT_PROGRESS, showLoadingFontMessage);
 			_file.addEventListener(SubtitleFileLoaderEvent.FONT_COMPLETE, showCompleteMessage);
 			_file.addEventListener(SubtitleFileLoaderEvent.COMPLETE, showCompleteMessage);
+			
 		}
+		
+		public function destroy():void
+		{
+			_file.removeEventListener(SubtitleFileLoaderEvent.LOAD, showLoadingSubtitlesMessage);
+			_file.removeEventListener(SubtitleFileLoaderEvent.PROGRESS, showLoadingSubtitlesMessage);
+			_file.removeEventListener(SubtitleFileLoaderEvent.FONT_LOAD, showLoadingFontMessage);
+			_file.removeEventListener(SubtitleFileLoaderEvent.FONT_PROGRESS, showLoadingFontMessage);
+			_file.removeEventListener(SubtitleFileLoaderEvent.FONT_COMPLETE, showCompleteMessage);
+			_file.removeEventListener(SubtitleFileLoaderEvent.COMPLETE, showCompleteMessage); 
+			_file = null;
+		}
+		 
 		
 		
 		protected function showLoadingSubtitlesMessage(event:SubtitleFileLoaderEvent):void
@@ -34,7 +51,7 @@ package org.mindpirates.video.subs.view
 			var percent:Number = event.bytesTotal ?  Math.round(event.bytesLoaded/event.bytesTotal*1000)/10 : 0;
 			message = message.replace('{name}', fileName);
 			message = message.replace('{percent}', percent); 
-			_target.view.ui.statusMessage = message;  
+			_target.view.statusMessage = message; 
 		}
 		protected function showLoadingFontMessage(event:SubtitleFileLoaderEvent):void
 		{
@@ -43,19 +60,13 @@ package org.mindpirates.video.subs.view
 			var percent:Number = event.bytesTotal ?  Math.round(event.bytesLoaded/event.bytesTotal*1000)/10 : 0;
 			message = message.replace('{name}', _file.fontName+' ('+fileName+')');
 			message = message.replace('{percent}', percent); 
-			_target.view.ui.statusMessage = message;  
+			_target.view.statusMessage = message;  
 		}
 		
 		protected function showCompleteMessage(event:SubtitleFileLoaderEvent):void
 		{
-			_target.view.ui.statusMessage = Strings.STATUS_LOADING_COMPLETE; 
+			_target.view.statusMessage = null;
 		}
-		
-		public function destroy():void
-		{
-			_file.removeEventListener(SubtitleFileLoaderEvent.LOAD, showLoadingSubtitlesMessage);
-			_file.removeEventListener(SubtitleFileLoaderEvent.FONT_LOAD, showLoadingFontMessage);
-			_file.removeEventListener(SubtitleFileLoaderEvent.COMPLETE, showCompleteMessage);
-		}
+		 
 	}
 }

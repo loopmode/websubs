@@ -17,12 +17,12 @@ package org.mindpirates.video.subs
 	import org.mindpirates.video.events.VideoPlayerEvent;
 	import org.mindpirates.video.subs.loading.SubsListLoader;
 	import org.mindpirates.video.subs.loading.SubtitleFileLoader;
-	import org.mindpirates.video.subs.view.StatusWatcher;
 	import org.mindpirates.video.subs.view.SubtitleTextField;
 	import org.mindpirates.video.subs.view.SubtitlesUI;
 	import org.mindpirates.video.subs.view.SubtitlesView;
 	import org.mindpirates.video.vimeo.VimeoSubtitlesUI;
 	 
+	
 	
 	
 	/**
@@ -87,9 +87,7 @@ package org.mindpirates.video.subs
 		/**
 		 * The currently displayed subtitle line
 		 */
-		private var _currentSubtitleLine:SubtitleLine;
-		private var statusWatcher:StatusWatcher;
-		
+		private var _currentSubtitleLine:SubtitleLine; 
 		
 		/**
 		 * @param vars The flashvars passed from the HTML page
@@ -182,9 +180,8 @@ package org.mindpirates.video.subs
 		
 		protected function handleSelectFileChange(event:Event):void
 		{
-			trace(this, 'handleSelectFileChange', view.ui.comboBox.selectedItem.label);
+			//trace(this, 'handleSelectFileChange', view.ui.comboBox.selectedItem.label);
 			var fileLoader:SubtitleFileLoader = view.ui.comboBox.selectedItem.fileLoader;
-			statusWatcher = new StatusWatcher(this, fileLoader);
 			if (!fileLoader.isLoaded) {
 				loadSubtitles( fileLoader );
 			}
@@ -210,6 +207,9 @@ package org.mindpirates.video.subs
 		{  
 			fileLoader.addEventListener(SubtitleFileLoaderEvent.COMPLETE, handleSubtitleFileLoaded);
 			fileLoader.load();
+			var event:SubtitleEvent = new SubtitleEvent(SubtitleEvent.FILE_LOAD);
+			event.file = fileLoader;
+			main.dispatchEvent(event);
 		}
 		
 		
@@ -232,14 +232,7 @@ package org.mindpirates.video.subs
 		private function displaySubtitles(file:SubtitleFileLoader):void
 		{ 
 			trace(this, 'displaySubtitles', file,'('+file.fileURL+', '+file.fontFile+')');
-			
-			if (statusWatcher) {
-				statusWatcher.destroy();
-				statusWatcher = null;
-				view.ui.statusMessage = null;
-			}
-			
-			
+			 
 			_currentFile = file;
 			_currentSubtitleLine = null;
 			
@@ -255,8 +248,8 @@ package org.mindpirates.video.subs
 			}
 			
 			// reset the font
-			view.textField.fontSize = file.fontSize ? file.fontSize : SubtitleTextField.defaultFontSize; 
-			view.textField.fontName = file.fontName ? file.fontName : SubtitleTextField.defaultFontName;
+			view.subtitlesTextField.fontSize = file.fontSize ? file.fontSize : SubtitleTextField.defaultFontSize; 
+			view.subtitlesTextField.fontName = file.fontName ? file.fontName : SubtitleTextField.defaultFontName;
 			
 			updateSubtitleLine();
 			
@@ -361,16 +354,17 @@ package org.mindpirates.video.subs
 		private function setSubtitleLine(line:SubtitleLine):void
 		{
 			var event:SubtitleEvent = new SubtitleEvent( SubtitleEvent.LINE_CHANGED );
+			event.file = _currentFile;
 			event.oldLine = _currentSubtitleLine;
 			
 			if (line) {
 				event.newLine = line;
 				event.text = line.text;
-				view.textField.text = line.text;
+				view.subtitlesTextField.text = line.text;
 				_currentSubtitleLine = line;
 			}
 			else {
-				view.textField.text = '';
+				view.subtitlesTextField.text = '';
 				_currentSubtitleLine = null;
 			}
 			
