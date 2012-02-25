@@ -6,10 +6,14 @@ package org.mindpirates.video.subs.view
 	
 	import fl.controls.ComboBox;
 	import fl.data.DataProvider;
+	import fl.events.ListEvent;
 	
+	import flash.display.Graphics;
+	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
+	import flash.filters.DropShadowFilter;
 	import flash.text.AntiAliasType;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
@@ -27,6 +31,8 @@ package org.mindpirates.video.subs.view
 		private var lastText:String;
 		private var textUpdateTimer:Timer;
 		private static const MAX_UPDATE_TIMER_STEPS:int = 10;
+		private var tooltip:Sprite;
+		private var hilightColor:uint = 0x259FE2;
 		
 		public function SubsComboBox()
 		{ 
@@ -44,11 +50,30 @@ package org.mindpirates.video.subs.view
 			addEventListener(MouseEvent.ROLL_OVER, handleRollOver);
 			addEventListener(MouseEvent.ROLL_OUT, handleRollOut);
 			
+			
+			addEventListener(ListEvent.ITEM_ROLL_OVER, handleItemRollOver);
+			addEventListener(ListEvent.ITEM_ROLL_OUT, handleItemRollOut);
+		}
+		
+		
+		protected function handleItemRollOver(event:ListEvent):void
+		{ 
+			removeTooltip(); 
+			var selectedItem:Object = dataProvider.getItemAt(Number(event.rowIndex.toString()));
+			if(selectedItem && selectedItem.description) {
+				tooltip = createTooltip(selectedItem.description); 
+				tooltip.x = event.target.x + event.target.width + 7;
+				tooltip.y = parent.mouseY;
+			}
+		}
+		protected function handleItemRollOut(event:ListEvent):void
+		{
+			removeTooltip();			
 		}
 		
 		protected function handleRollOver(event:MouseEvent):void
 		{
-			label.backgroundColor = 0x259FE2;
+			label.backgroundColor = hilightColor;
 		}
 		
 		protected function handleRollOut(event:MouseEvent):void
@@ -56,6 +81,92 @@ package org.mindpirates.video.subs.view
 			label.backgroundColor = 0x111A19;
 			
 		}
+		
+		/*
+		-------------------------------------------------------------
+		
+		TOOLTIP
+		
+		-------------------------------------------------------------
+		*/
+		
+		private function createTooltip(text:String):Sprite
+		{
+			
+			var tt:Sprite = new Sprite();
+			
+			var pad:Number = 3;
+			var extraW:Number = 2;
+			var extraH:Number = 3;
+			var triHeight:Number = 7;
+			var triWidth:Number = 7;
+			var tf:TextField = new TextField();
+			tf.autoSize = TextFieldAutoSize.LEFT;
+			tf.embedFonts = true;
+			var tformat:TextFormat = new TextFormat();
+			tformat.font = EmbeddedFonts.UNI_05_53;
+			tformat.color = 0xffffff;
+			tformat.size = 8;
+			tf.defaultTextFormat = tformat;
+			tf.text = text;
+			tf.x = pad;
+			tf.y = pad;
+			
+			var w:Number = tf.textWidth+pad*2+extraW
+			var h:Number = tf.textHeight+pad*2+extraH;
+			var g:Graphics = tt.graphics;
+			g.clear(); 
+			g.beginFill(hilightColor, 0.95);
+			g.drawRoundRect(0,0,w,h,10,10);
+			g.moveTo(0, h/2 - triHeight/2);
+			g.lineTo(-triWidth, h/2);
+			g.lineTo(0, h/2 + triHeight/2);
+			g.endFill();
+			
+			tt.alpha = 0;
+			tt.addChild(tf);
+			tt.filters = [new DropShadowFilter(4,45,0,0.5)];
+			parent.addChild(tt); 
+			
+			stage.addEventListener(MouseEvent.MOUSE_MOVE, handleTooltipMouseMove, false, 0, true); 
+			
+			//fadein
+			var t:Timer = new Timer(1, 1);
+			var fadein:Function = function(e:TimerEvent):void {
+				t.removeEventListener(TimerEvent.TIMER_COMPLETE, fadein);
+				if (tt) {
+					TweenLite.to(tt, 0.1, {alpha: 1});	
+				}
+			};
+			t.addEventListener(TimerEvent.TIMER_COMPLETE, fadein, false, 0, true);
+			t.start();
+			
+			return tt;
+		}
+		
+		private function handleTooltipMouseMove(e:MouseEvent):void
+		{
+			if (tooltip) {
+				tooltip.x = x + width + 7;
+				tooltip.y = y - (height*(dataProvider.length)) +  e.target.y;
+			}
+		} 
+		
+		private function removeTooltip():void
+		{
+			try {
+				tooltip.parent.removeChild(tooltip);
+				stage.removeEventListener(MouseEvent.MOUSE_MOVE, handleTooltipMouseMove);
+			}
+			catch (err:Error) {
+				
+			}
+			tooltip = null;
+		}
+		
+		
+		
+		
 		
 		private function createLabel():void
 		{
@@ -171,7 +282,8 @@ package org.mindpirates.video.subs.view
 				dp.push({
 					label: file.title,
 					title: file.title,
-					fileLoader: file
+					fileLoader: file,
+					description: file.description
 				}); 
 			}
 			return new DataProvider(dp);
