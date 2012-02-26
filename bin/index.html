@@ -6,12 +6,13 @@
 		<link rel="stylesheet" type="text/css" media="screen" href="media/css/style.css" />
 		<script type="text/javascript" src="media/js/jquery.min.js"></script>
 		<script type="text/javascript" src="media/js/swfobject.js"></script>
+		<script type="text/javascript" src="media/js/websubs.js"></script>
 		<!--[if IE]>
 			<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
 		
 		<style type="text/css">
-			#myContent {
+			.vimeosubs {
 				width: 640px;
 				height: 360px;
 				background: black;
@@ -20,28 +21,14 @@
 		
 		<script type="text/javascript">
 			$(function() {
-				var flashvars = {
-						video_id: 17712557,
-						subtitles_list: 'media/xml/subtitles.xml',
-						subtitles: 'test',
-						autoplay: true
-					},
-					params = {allowFullScreen: true, allowScriptAccess: 'always', wmode: 'window'},
-					attributes = {},
-					callback = function() {
-						$('#myContent').removeClass('loading');
-					};
-				
-				$('#myContent').addClass('loading');	 
-				swfobject.embedSWF("media/swf/VimeoSubtitlePlayer.swf", "myContent", "640", "360", "11.1.0", "expressInstall.swf", flashvars, params, attributes, callback);
+				$('#player').vimeosubs({
+					subtitles_list: './media/xml/subtitles.xml'
+				})
 			});
 		</script>
 		
 	</head>
 	<body>
-		<div id="myContent">
-			<h1>Flash Player required</h1>
-			<p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" /></a></p>
-		</div>
+		<iframe id="player" src="http://player.vimeo.com/video/17712557?title=0&amp;byline=0&amp;portrait=0&amp;autoplay=1" width="640" height="360" frameborder="0"></iframe>
 	</body>
 </html>

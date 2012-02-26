@@ -34,14 +34,18 @@ package org.mindpirates.video.subs.view
 			
 			subs.main.videoPlayer.addEventListener(VideoPlayerEvent.PLAYER_READY, handlePlayerReady);
 			
-			comboBox = new SubsComboBox();  
-			comboBox.height = comboBox.dropdown.rowHeight = 17; 
-			addChild(comboBox);
+			createComboBox();
 			
 			addEventListener(Event.ADDED_TO_STAGE, handleAdded);
 			
 		}
-		 
+		
+		protected function createComboBox():void
+		{
+			comboBox = new SubsComboBox();  
+			comboBox.height = comboBox.dropdown.rowHeight = 17; 
+			addChild(comboBox);
+		}		 
 		 
 		/**
 		 * Destroys the instance and removes all event listeners.

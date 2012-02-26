@@ -3,6 +3,7 @@ package org.mindpirates.video
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.external.ExternalInterface;
 	
 	import org.mindpirates.video.events.VideoPlayerEvent;
 	
@@ -87,6 +88,16 @@ package org.mindpirates.video
 		public function VideoPlayerBase()
 		{
 			super();
+			initJS();
+		}
+		
+		private function initJS():void
+		{
+			ExternalInterface.addCallback('play', this.play);
+			ExternalInterface.addCallback('stop', this.stop);
+			ExternalInterface.addCallback('pause', this.pause);
+			ExternalInterface.addCallback('seekTo', this.seekToTime); 
+			ExternalInterface.addCallback('isPlaying', this.getIsPlaying); 
 		}
 		
 		/**
@@ -247,6 +258,15 @@ package org.mindpirates.video
 			// must be implemented by derived classes
 			throw new Error('function get isPlaying() not implemented');
 			return false;
+		}
+		
+		/**
+		 * @private
+		 * for ExternalInterface access
+		 */
+		private function getIsPlaying():Boolean
+		{
+			return isPlaying;
 		}
 		
 		/**
