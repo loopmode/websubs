@@ -2,6 +2,7 @@
 /*jslint white: true*/
 (function($) {
 	"use strict";
+	
 	var defaults = {
 			swfpath: './media/swf/',
 			swfname: 'VimeoSubtitlePlayer.swf',
@@ -16,6 +17,7 @@
 			bgcolor: '0x000000'
 		},
 
+		isiPad = window.navigator.userAgent.match(/iPad/i) !== null,
 		o = null,
 		id = null,
 		src = null,
@@ -114,10 +116,12 @@
 				swfobject.embedSWF(o.swfpath + o.swfname, id, width, height, o.swfminversion, o.swfpath + o.swfupdater,	flashvars(o), params(o), attribs(o), o.callback);
 			}
 		};
-	 	   
+		
 	$.fn.websubs = function(method) {
 		var result;
-	    if ( methods[method] ) { 
+	    if (isiPad) {
+			result = null;
+	    } else if ( methods[method] ) { 
 			result = methods[ method ].apply( this, Array.prototype.slice.call( arguments, 1 ));
 	    } else if ( typeof method === 'object' || ! method ) {
 			result = methods.init.apply( this, arguments );
