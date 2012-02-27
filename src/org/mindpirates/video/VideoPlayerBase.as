@@ -97,7 +97,9 @@ package org.mindpirates.video
 			ExternalInterface.addCallback('stop', this.stop);
 			ExternalInterface.addCallback('pause', this.pause);
 			ExternalInterface.addCallback('seekTo', this.seekToTime); 
+			ExternalInterface.addCallback('isReady', this.getIsReady); 
 			ExternalInterface.addCallback('isPlaying', this.getIsPlaying); 
+			ExternalInterface.addCallback('isPaused', this.getIsPaused); 
 		}
 		
 		/**
@@ -251,6 +253,15 @@ package org.mindpirates.video
 		}
 		
 		/**
+		 * @private
+		 * Makes <code>isReady</code> available ExternalInterface access
+		 */
+		private function getIsReady():Boolean
+		{
+			return isReady;
+		}
+		
+		/**
 		 * @copy org.mindpirates.video.IVideoPlayer#isPlaying
 		 */
 		public function get isPlaying():Boolean
@@ -262,7 +273,7 @@ package org.mindpirates.video
 		
 		/**
 		 * @private
-		 * for ExternalInterface access
+		 * Makes <code>isPlaying</code> available ExternalInterface access
 		 */
 		private function getIsPlaying():Boolean
 		{
@@ -277,6 +288,15 @@ package org.mindpirates.video
 			// must be implemented by derived classes
 			throw new Error('function get isPaused() not implemented');
 			return false;
+		}
+		
+		/**
+		 * @private
+		 * Makes <code>isPaused</code> available ExternalInterface access
+		 */
+		private function getIsPaused():Boolean
+		{
+			return isPaused;
 		}
 		
 		

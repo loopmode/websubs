@@ -5,6 +5,7 @@ package org.mindpirates.video.subs
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.TimerEvent;
+	import flash.external.ExternalInterface;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.text.Font;
@@ -100,13 +101,19 @@ package org.mindpirates.video.subs
 			addPlayerEvents();
 			createTimer();		
 			createView();
-			
+			initJS();
 			if (main.flashVars.subtitlesList) {
 				loadSubtitlesList(main.flashVars.subtitlesList);
 			}
 			else {
 				throw new Error('No subtitle list specified in flashvars!')
 			}
+		}
+		
+		private function initJS():void
+		{
+			ExternalInterface.addCallback('list', loadSubtitlesList);
+			ExternalInterface.addCallback('subtitles', loadSubtitlesJS);
 		}
 		
 		/**
@@ -212,6 +219,21 @@ package org.mindpirates.video.subs
 			main.dispatchEvent(event);
 		}
 		
+		/**
+		 * Loads a subtitles file. This function is made available to JS via ExternalInterface.
+		 */
+		public function loadSubtitlesJS(id:String):void
+		{
+			var file:SubtitleFileLoader;
+			for each(var f:SubtitleFileLoader in listLoader.files) {
+				if (f.id == id) {
+					file = f;
+				}
+			}
+			if (file) {
+				loadSubtitles(file);
+			}
+		}
 		
 		
 		/**

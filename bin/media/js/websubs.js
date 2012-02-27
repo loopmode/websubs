@@ -52,6 +52,10 @@
 			}
 			return result;
 		},
+		/**
+		 * Methods defined in the swf and made available via ExternalInterface.addCallback()
+		 */
+		swfmethods = 'play,pause,stop,isReady,isPlaying,isPaused,seekTo,subtitles,list',
 		methods = {
 			//-----------------------------------------------------------
 			// init
@@ -70,33 +74,19 @@
 				$(this).remove(); 
 				div.append($('<div id="'+id+'">'));
 				swfobject.embedSWF(o.swfpath + o.swfname, id, width, height, o.swfminversion, o.swfpath + o.swfupdater,	flashvars(o), params(o), attribs(o), o.callback);
-			},
-			play: function() {
-				return this[0].play();
-			},
-			pause: function() {
-				return this[0].pause();
-			},
-			stop: function() {
-				return this[0].stop();
-			},
-			isPlaying: function() {
-				return this[0].isPlaying();
-			},
-			seekTo: function(value) {
-			console.log(value)
-				return this[0].seekTo(value);
 			}
 		};
 		   
-	$.fn.vimeosubs = function(method, options) {
+	$.fn.websubs = function(method, options) {
 		  
 	    if ( methods[method] ) { 
 	      return methods[ method ].apply( this, Array.prototype.slice.call( arguments, 1 ));
 	    } else if ( typeof method === 'object' || ! method ) {
 	      return methods.init.apply( this, arguments );
+	    } else if (swfmethods.indexOf(method) != -1) {
+	   		return arguments.length > 1 ? this[0][method](Array.prototype.slice.call( arguments, 1 )) : this[0][method]();
 	    } else {
-	      $.error( 'Method ' +  method + ' does not exist on jQuery.vimeosubs' );
+	      $.error( 'Method ' +  method + ' does not exist on jQuery.websubs' );
 	    }    
 		
 	};
