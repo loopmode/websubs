@@ -103,7 +103,7 @@
 			init: function(options) {
 				o = $.extend({}, defaults, options);
 				src = $(this).attr('src');		 
-				id = $(this).attr('id');
+				id = $(this).attr('id') || 'websubs_'+($.fn.websubs.idc++);
 				$(this).removeAttr('id');
 				width = $(this).width();
 				height = $(this).height();
@@ -132,5 +132,5 @@
 	    }    
 		
 	};
-	
+	$.fn.websubs.idc = 0;
 }(jQuery));
