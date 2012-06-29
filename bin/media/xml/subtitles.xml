@@ -1,4 +1,4 @@
-<?xml encoding="UTF-8" version="1.0"?> 
+<?xml version="1.0" standalone="yes" ?>
 <subtitles default_id="ger">
 	<subtitle format="srt" id="def" title="Standard" description="English (On foreign languages only)">./media/subtitles/problema_english_basic.srt</subtitle>  
 	<subtitle format="srt" id="arb" title="Arabic" fontName="Adobe Arabic" fontFile="./media/swf/font-arabic.swf" fontSize="30">./media/subtitles/problema_arabic.srt</subtitle>

@@ -7,28 +7,56 @@
 		<script type="text/javascript" src="media/js/jquery.min.js"></script>
 		<script type="text/javascript" src="media/js/swfobject.js"></script>
 		<script type="text/javascript" src="media/js/websubs.js"></script>
+		<!--<script type="text/javascript" src="media/js/aleksic.websubs.js"></script>-->
 		<!--[if IE]>
 			<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
 		
 		<style type="text/css">
-			.vimeosubs {
+			@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic,700italic&subset=latin,latin-ext);
+			.player {
 				width: 640px;
 				height: 360px;
 				background: black;
+				position:relative;
 			}
+			.player .subtitles {
+				width: 100%;
+				text-align: center;
+				position: absolute;
+				bottom:50px;
+				left: 0;
+				color: white;
+				font-size: 20px;
+				font-family: 'Open Sans', sans-serif;
+				cursor: default;
+				text-shadow: 0 1px 1px black;
+			}
+			.arb .subtitles {
+				font-size: 25px;
+			}
+		  	select {
+		  		position:absolute;
+		  		right: 0;
+		  	}
 		</style>
 		
 		<script type="text/javascript">
 			$(function() {
 				$('iframe').websubs({
-					subtitles_list: './media/xml/subtitles.xml'
-				})
+					subtitles_list: './media/xml/subtitles.xml',
+					select: $('.player select')
+				});
 			});
 		</script>
 		
 	</head>
 	<body>
-		<iframe src="http://player.vimeo.com/video/17712557?title=0&amp;byline=0&amp;portrait=0&amp;autoplay=1" width="640" height="360" frameborder="0"></iframe>
+		<div class="player">
+			<iframe src="http://player.vimeo.com/video/17712557?title=0&amp;byline=0&amp;portrait=0&amp;autoplay=1" width="640" height="360" frameborder="0">
+				<!-- vimeo iframe -->
+			</iframe>
+			<select></select>
+		</div>
 	</body>
 </html>
