@@ -178,6 +178,7 @@ package org.mindpirates.video.vimeo
 		 */
 		override internal function playProgressHandler(event:Event):void
 		{
+			trace('playback', event);
 			if (api_version == 2) dispatchEvent( createVideoPlayerEvent( VideoPlayerEvent.PLAY_PROGRESS, event ));
 		}
 		

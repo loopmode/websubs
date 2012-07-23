@@ -1,8 +1,21 @@
 package org.mindpirates.video.subs.view
 {
+	import de.loopmode.tooltips.Tooltip;
+	import de.loopmode.tooltips.Tooltips;
+	import de.loopmode.tooltips.backgrounds.TooltipArrowBackground;
+	
+	import embed.fonts.EmbeddedFonts;
+	
+	import fl.controls.Button;
+	import fl.events.ComponentEvent;
+	
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.FullScreenEvent;
+	import flash.events.MouseEvent;
+	import flash.text.TextField;
+	import flash.text.TextFieldAutoSize;
+	import flash.text.TextFormat;
 	
 	import org.mindpirates.video.events.VideoPlayerEvent;
 	import org.mindpirates.video.subs.Subtitles;
@@ -13,6 +26,9 @@ package org.mindpirates.video.subs.view
 		 * The ComboBox for selecting the subtitles file
 		 */
 		public var comboBox:SubsComboBox;
+		
+		public var btnIncreaseSize:SubsButton;
+		public var btnDecreaseSize:SubsButton;
 		
 		/**
 		 * holds the value for <code>subtitles</code>
@@ -35,15 +51,35 @@ package org.mindpirates.video.subs.view
 			subs.main.videoPlayer.addEventListener(VideoPlayerEvent.PLAYER_READY, handlePlayerReady);
 			
 			createComboBox();
+			createButtons();
 			
 			addEventListener(Event.ADDED_TO_STAGE, handleAdded);
 			
 		}
 		
+		private function createButtons():void
+		{
+			btnIncreaseSize = new SubsButton();
+			btnIncreaseSize.label = '';
+			btnIncreaseSize.tf.text = '+';	
+			btnIncreaseSize.tooltip = 'Increase size of subtitles';
+			btnIncreaseSize.addEventListener(MouseEvent.CLICK, subs.increaseTextSize);
+			addChild(btnIncreaseSize);
+			
+			btnDecreaseSize = new SubsButton();
+			btnDecreaseSize.label = '';
+			btnDecreaseSize.tf.text = '-';	
+			btnDecreaseSize.tooltip = 'Decrease size of subtitles'; 
+			btnDecreaseSize.addEventListener(MouseEvent.CLICK, subs.decreaseTextSize);
+			addChild(btnDecreaseSize);
+		}
+		 
+		
 		protected function createComboBox():void
 		{
 			comboBox = new SubsComboBox();  
 			comboBox.height = comboBox.dropdown.rowHeight = 17; 
+			comboBox.addEventListener(Event.CHANGE, layout);
 			addChild(comboBox);
 		}		 
 		 
@@ -144,7 +180,7 @@ package org.mindpirates.video.subs.view
 		/**
 		 * Applies layout to the subtitlesUI. Must be implemented by derived classes to work well with the external videoplayer's UI.
 		 */
-		public function layout():void
+		public function layout(event:Event=null):void
 		{ 
 		}
 		

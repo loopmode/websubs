@@ -1,6 +1,7 @@
 package org.mindpirates.video
 {
 	import flash.display.DisplayObject;
+	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.external.ExternalInterface;
@@ -93,13 +94,15 @@ package org.mindpirates.video
 		
 		private function initJS():void
 		{
-			ExternalInterface.addCallback('play', this.play);
-			ExternalInterface.addCallback('stop', this.stop);
-			ExternalInterface.addCallback('pause', this.pause);
-			ExternalInterface.addCallback('seekTo', this.seekToTime); 
-			ExternalInterface.addCallback('isReady', this.getIsReady); 
-			ExternalInterface.addCallback('isPlaying', this.getIsPlaying); 
-			ExternalInterface.addCallback('isPaused', this.getIsPaused); 
+			if (ExternalInterface.available) {
+				ExternalInterface.addCallback('play', this.play);
+				ExternalInterface.addCallback('stop', this.stop);
+				ExternalInterface.addCallback('pause', this.pause);
+				ExternalInterface.addCallback('seekTo', this.seekToTime); 
+				ExternalInterface.addCallback('isReady', this.getIsReady); 
+				ExternalInterface.addCallback('isPlaying', this.getIsPlaying); 
+				ExternalInterface.addCallback('isPaused', this.getIsPaused);
+			}
 		}
 		
 		/**
@@ -312,6 +315,30 @@ package org.mindpirates.video
 			var event:VideoPlayerEvent = new VideoPlayerEvent( type );
 			event.originalEvent = originalEvent;
 			return event;
+		}
+		
+		public function findPlayerChildren(childClass:Class):Array
+		{
+			return findNestedChildren(player as DisplayObjectContainer, childClass);
+		}
+		
+		public function findNestedChildren(container:DisplayObjectContainer, childClass:Class):Array 
+		{ 
+			var result:Array = [];
+			var child:DisplayObject; 
+			for (var i:uint=0; i < container.numChildren; i++) 
+			{ 
+				child = container.getChildAt(i);
+				if (child is childClass) {
+					result.push(child);
+				}
+				//trace(indentString, child, child.name);  
+				if (container.getChildAt(i) is DisplayObjectContainer) 
+				{ 
+					result = result.concat(findNestedChildren(DisplayObjectContainer(child), childClass));
+				} 
+			} 
+			return result;
 		}
 	}
 }

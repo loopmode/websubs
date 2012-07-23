@@ -1,9 +1,9 @@
 package org.mindpirates.video.subs
 {
 
-	import utils.StringUtils;
-	
 	import flash.system.System;
+	
+	import utils.StringUtils;
 	 
 	 
 
@@ -41,15 +41,12 @@ package org.mindpirates.video.subs
 		
 		public function getLineIndex(value:SubtitleLine):int
 		{
-			//trace('getLineIndex()', value);
 			var result:int = -1; 
 			for (var i:int=0,t:int=_data.length; i<t; i++)  {
-				//trace('-->', _data[i].start, value.start,_data[i].end, value.end )
 				if (_data[i].start == value.start && _data[i].end == value.end) {
 					result = i;
 				}
 			}
-			//trace('--> '+result);
 			return result;
 			
 		}
@@ -75,18 +72,18 @@ package org.mindpirates.video.subs
 		 */
 		public function getLineAtTime(time:Number):SubtitleLine
 		{ 
-			//trace('getLineAtTime('+time+')')
 			time = time/1000;
 			var result:SubtitleLine; 
-			for (var i:int=0,t:int=_data.length; i<t; i++) 
+			var i:int=0,
+				t:int=_data.length;
+			while(i<t)
 			{
 				var line:SubtitleLine = _data[i];
-				//trace('line.start: '+line.start+', line.end: '+line.start);
 				if (line.start <= time && line.end >= time) {
 					result = line;
 				}
+				i++;
 			}
-			//trace('--> '+result);
 			return result;
 		}
 		

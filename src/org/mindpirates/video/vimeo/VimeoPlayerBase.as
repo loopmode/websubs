@@ -87,21 +87,12 @@ package org.mindpirates.video.vimeo
 			
 			var api_param : String = '&js_api=1';
 			this.api_version = api_version;
-			
-			//
-			if (fp_version != '9')
-			{
-				switch(api_version)
-				{
-					case 2:
-						api_param = '&api=1';
-						break;
-				}
-			}
-			else
+			if (fp_version == '9')
 			{
 				this.api_version = 1;
 			}
+			
+			api_param += '&api_version=' + this.api_version;
 			
 			var url:String = MOOGALOOP_URL 
 								+ "?oauth_key=" + oauth_key 
@@ -123,6 +114,8 @@ package org.mindpirates.video.vimeo
 			this.addEventListener(Event.ADDED_TO_STAGE, addedToStageHandler, false, 0, true);
 
 			_clip_id = clip_id;
+			
+			trace('VimeoPlayerBase', url);
 		}
 		
 		override public function destroy() : void

@@ -2,6 +2,7 @@ package org.mindpirates.video.vimeo
 {
 	import embed.fonts.EmbeddedFonts;
 	
+	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.FullScreenEvent;
@@ -9,16 +10,23 @@ package org.mindpirates.video.vimeo
 	import flash.filters.DropShadowFilter;
 	import flash.geom.Point;
 	import flash.media.Video;
+	import flash.net.NetStream;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
 	import flash.utils.Timer;
 	
+	import mx.utils.StringUtil;
+	
 	import org.mindpirates.video.VideoPlayerBase;
+	import org.mindpirates.video.events.SubtitleEvent;
 	import org.mindpirates.video.events.VideoPlayerEvent;
+	import org.mindpirates.video.subs.SubtitleLine;
 	import org.mindpirates.video.subs.Subtitles;
 	import org.mindpirates.video.subs.view.SubtitlesUI;
+	
+	import utils.StringUtils;
 
 	public class VimeoSubtitlesUI extends SubtitlesUI
 	{
@@ -35,12 +43,39 @@ package org.mindpirates.video.vimeo
 		 */
 		private var _initialSelectBoxPosition:Point;
 		
+		
+		private var tf1:TextField;
+		private var tf2:TextField;
+		private var tf3:TextField;
+		
 		public function VimeoSubtitlesUI(target:Subtitles)
 		{
 			super(target); 
 			moogaloop.addEventListener(VideoPlayerEvent.PLAY_PROGRESS, handlePlaybackStartedOnce);
+			comboBox.addEventListener(Event.RESIZE, layout);
+			
+			target.main.addEventListener(SubtitleEvent.LINE_CHANGED, layout);
+			/*
+			tf1 = tmp_createTF();
+			tf2 = tmp_createTF();
+			tf2.y = 25;
+			tf3 = tmp_createTF();
+			tf3.y = 75;
+			*/
 		}
 		
+		private function tmp_createTF():TextField
+		{
+			var tf:TextField = new TextField();
+			tf.background = true;
+			tf.autoSize = TextFieldAutoSize.LEFT;
+			tf.multiline = true;
+			tf.height = 20;
+			tf.textColor = 0x000000;
+			subs.main.stage.addChild(tf);
+			return tf;
+			
+		}		
 		
 		
 		
@@ -65,6 +100,27 @@ package org.mindpirates.video.vimeo
 				a = moogaloop.ui.controlBar.alpha;
 			}
 			alpha = a; 
+			layout();
+			/*
+			if (subs && subs.main && subs.main.videoPlayer) {
+				tf1.text = StringUtils.videoTime(subs.main.videoPlayer.positionTime);
+				
+				var nss:Array = findChild(subs.main.videoPlayer.player as DisplayObjectContainer, 'NetStream');
+				var ns:NetStream = nss[0];
+				if (ns) {
+					tf1.text += "\n" + StringUtils.videoTime(  ns.time  );
+				}
+				var line:SubtitleLine = subs.currentLine;
+				if (line) {
+					tf2.text = StringUtils.videoTime(line.start * 1000) + ' --> ' + StringUtils.videoTime(line.end * 1000);
+					tf3.text = line.text;
+				}
+				else {
+					tf2.text = '-';
+					tf3.text = '-';
+				}
+			}
+			*/
 			//subs.view.ui.selectBox.dropdown.alpha = a;
 		}
 		
@@ -100,7 +156,7 @@ package org.mindpirates.video.vimeo
 		}	
 		
 		
-		override public function layout():void
+		override public function layout(event:Event=null):void
 		{
 			super.layout();
 			
@@ -117,6 +173,24 @@ package org.mindpirates.video.vimeo
 					comboBox.y = _initialSelectBoxPosition.y;
 				}
 			}
+			
+			var tf:TextField;
+			
+			btnIncreaseSize.width = comboBox.height;
+			btnIncreaseSize.height = comboBox.height;
+			btnIncreaseSize.y = comboBox.y;
+			btnIncreaseSize.x = comboBox.x + comboBox.width + 5;
+			tf = btnIncreaseSize.getChildByName('tf') as TextField;
+			tf.x = 0.5 * (btnIncreaseSize.width - tf.width) + 1;
+			tf.y = 0.5 * (btnIncreaseSize.height - tf.height) - 1;
+			
+			btnDecreaseSize.width = comboBox.height;
+			btnDecreaseSize.height = comboBox.height;
+			btnDecreaseSize.y = comboBox.y;
+			btnDecreaseSize.x = btnIncreaseSize.x + btnIncreaseSize.width + 5;
+			tf = btnDecreaseSize.getChildByName('tf') as TextField;
+			tf.x = 0.5 * (btnDecreaseSize.width - tf.width) + 1;
+			tf.y = 0.5 * (btnDecreaseSize.height - tf.height) - 1;
 			
 			if (!_initialSelectBoxPosition) {
 				_initialSelectBoxPosition = new Point(comboBox.x, comboBox.y);

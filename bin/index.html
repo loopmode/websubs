@@ -39,6 +39,21 @@
 		  		position:absolute;
 		  		right: 0;
 		  	}
+		  	
+		  	.websubs .textfield {
+		  		position: absolute;
+				z-index: 1;
+				bottom: 60px;
+				left: 0;
+				font-family: Helvetica, Arial, Sans;
+				font-weight: bold;
+				width: 100%;
+				text-align:	center;
+				color: white;
+		  		font-size: 17px;
+		  		cursor: default;
+		  		text-shadow: #000 3px 3px 5px;
+		  	}
 		</style>
 		
 		<script type="text/javascript">
@@ -48,6 +63,29 @@
 					select: $('.player select')
 				});
 			});
+			
+			function seekTo(minutes) {
+				var ms = minutes * 60 * 1000;
+				
+				$('object')[0].seekTo(ms)
+			}
+			function seekToTime(string) {
+				var ms= getMsFromTimestring(string);
+				$('object')[0].seekTo(ms)
+				return ms;
+			}
+			function getMsFromTimestring(timeString) {
+				var timePieceArray = timeString.split(":");
+			
+		        var milliseconds = Number(timePieceArray[3])/100;
+		        var seconds = Number(timePieceArray[2]);
+		        var minutesInSeconds = Number(timePieceArray[1])*60;
+		        var hoursInSeconds = Number(timePieceArray[0])*60*60;
+		
+		        var timeInSeconds = hoursInSeconds + minutesInSeconds + seconds + milliseconds
+		
+		        return timeInSeconds * 1000;
+			}
 		</script>
 		
 	</head>

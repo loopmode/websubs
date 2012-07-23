@@ -2,6 +2,10 @@ package org.mindpirates.video.subs.view
 {
 	import com.greensock.TweenLite;
 	
+	import de.loopmode.tooltips.Tooltip;
+	import de.loopmode.tooltips.Tooltips;
+	import de.loopmode.tooltips.backgrounds.TooltipArrowBackground;
+	
 	import embed.fonts.EmbeddedFonts;
 	
 	import fl.controls.ComboBox;
@@ -34,6 +38,8 @@ package org.mindpirates.video.subs.view
 		private var tooltip:Sprite;
 		private var hilightColor:uint = 0x259FE2;
 		
+		private var isOpened:Boolean = false;
+		
 		public function SubsComboBox()
 		{ 
 			super(); 
@@ -53,8 +59,21 @@ package org.mindpirates.video.subs.view
 			
 			addEventListener(ListEvent.ITEM_ROLL_OVER, handleItemRollOver);
 			addEventListener(ListEvent.ITEM_ROLL_OUT, handleItemRollOut);
+			addEventListener(Event.OPEN, handleOpen);
+			
+			var ttformat:TextFormat = new TextFormat();
+			ttformat.font = EmbeddedFonts.UNI_05_53;
+			ttformat.color = 0xffffff;
+			ttformat.size = 8; 
+			Tooltips.createTip(this, 'Choose subtitle language', Tooltip.POSITION_TOP, ttformat,  new TooltipArrowBackground, 0, -1);
+			 
 		}
-		
+		 
+		protected function handleOpen(event:Event):void
+		{
+			isOpened = true;
+			Tooltips.hideTip(this);
+		}		
 		
 		protected function handleItemRollOver(event:ListEvent):void
 		{ 
@@ -109,8 +128,8 @@ package org.mindpirates.video.subs.view
 			tformat.size = 8;
 			tf.defaultTextFormat = tformat;
 			tf.text = text;
-			tf.x = pad;
-			tf.y = pad;
+			tf.x = int(pad);
+			tf.y = int(pad);
 			
 			var w:Number = tf.textWidth+pad*2+extraW
 			var h:Number = tf.textHeight+pad*2+extraH;
@@ -147,8 +166,8 @@ package org.mindpirates.video.subs.view
 		private function handleTooltipMouseMove(e:MouseEvent):void
 		{
 			if (tooltip) {
-				tooltip.x = x + width + 7;
-				tooltip.y = y - (height*(dataProvider.length)) +  e.target.y;
+				tooltip.x = int(x + width + 7);
+				tooltip.y = int(y - (height*(dataProvider.length)) +  e.target.y);
 			}
 		} 
 		
@@ -246,9 +265,9 @@ package org.mindpirates.video.subs.view
 				width: label.x + label.textWidth + textField.textWidth + 26,
 				onUpdate: function():void {
 					drawTextField();
+					dispatchEvent(new Event(Event.RESIZE));
 				}
 			});
-			
 			
 		}
 		

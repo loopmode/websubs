@@ -1,6 +1,10 @@
 package org.mindpirates.video.subs.loading
 {
+	import flash.events.AsyncErrorEvent;
+	import flash.events.ErrorEvent;
 	import flash.events.Event;
+	import flash.events.IOErrorEvent;
+	import flash.events.SecurityErrorEvent;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	
@@ -44,9 +48,19 @@ package org.mindpirates.video.subs.loading
 		override public function load(request:URLRequest):void
 		{
 			addEventListener(Event.COMPLETE, handleComplete);
+			addEventListener(ErrorEvent.ERROR, handleError);
+			addEventListener(AsyncErrorEvent.ASYNC_ERROR, handleError);
+			addEventListener(SecurityErrorEvent.SECURITY_ERROR, handleError);
+			addEventListener(IOErrorEvent.IO_ERROR, handleError);
 			super.load(request);
 		}
 		
+		protected function handleError(event:Event):void
+		{
+			var evt:SubtitleListLoaderEvent = new SubtitleListLoaderEvent( SubtitleListLoaderEvent.LOAD_ERROR );
+			evt.originalEvent = event;
+			dispatchEvent( evt );
+		}
 		protected function handleComplete(event:Event):void
 		{
 			_data = event.target.data;

@@ -95,6 +95,7 @@ package org.mindpirates.video.subs.view
 		override public function set text(value:String):void
 		{ 			
 			if (value) {
+				visible = true;
 				value = '<span class="subtitle">' + 
 					value.replace(/\r\n/g,'<br>')
 					.replace(/\r/g,'<br>')
@@ -103,10 +104,15 @@ package org.mindpirates.video.subs.view
 					.replace(/<\/b>/g, '</strong>') 
 					.replace(/<i>/g,'<em>')
 					.replace(/<\/i>/g, '</em>') 
-					+ '</span>'
+					+ '</span>';
+				
+				htmlText = StringUtils.removeExtraWhitespace(value); 
+				updateStyles();
 			} 
-			htmlText = StringUtils.removeExtraWhitespace(value); 
-			updateStyles();
+			else {
+				htmlText = '';
+				visible = false;
+			}
 		}
 		
 		
@@ -139,7 +145,7 @@ package org.mindpirates.video.subs.view
 			});  
 			 
 			styleSheet = ss;	
-			//trace(_text);
+			
 			htmlText = _text;
 		}
 		
@@ -148,8 +154,14 @@ package org.mindpirates.video.subs.view
 			if (value < 1) {
 				value = 1;
 			}
+			var _txt:String = htmlText;
+			htmlText = '';
+			
 			_fontSize = value;
 			updateStyles();
+			
+			htmlText = _txt;
+			
 		}
 		
 		public function get fontSize():Number
@@ -184,7 +196,6 @@ package org.mindpirates.video.subs.view
 		public function set fontName(name:String):void
 		{
 			_fontName = name;
-			trace(this, 'set font', name)
 			updateStyles(); 
 		}
 		public function get fontName():String

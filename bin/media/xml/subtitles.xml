@@ -1,6 +1,6 @@
 <?xml version="1.0" standalone="yes" ?>
 <subtitles default_id="ger">
-	<subtitle format="srt" id="def" title="Standard" description="English (On foreign languages only)">./media/subtitles/problema_english_basic.srt</subtitle>  
+	<subtitle format="srt" id="def" title="Standard" description="English (Only while other languages are spoken)">./media/subtitles/problema_english_basic.srt</subtitle>  
 	<subtitle format="srt" id="arb" title="Arabic" fontName="Adobe Arabic" fontFile="./media/swf/font-arabic.swf" fontSize="30">./media/subtitles/problema_arabic.srt</subtitle>
 	<subtitle format="srt" id="chn" title="Chinese" fontName="Bitstream Cyberbit" fontFile="./media/swf/font-chinese.swf" fontSize="22">./media/subtitles/problema_chinese.srt</subtitle>
 	<subtitle format="srt" id="eng" title="English">./media/subtitles/problema_english.srt</subtitle>  
@@ -8,6 +8,7 @@
 	<subtitle format="srt" id="ger" title="German">./media/subtitles/problema_german.srt</subtitle>
 	<subtitle format="srt" id="jap" title="Japanese" fontName="Meiryo UI" fontFile="./media/swf/font-japanese.swf" fontSize="22">./media/subtitles/problema_japanese.srt</subtitle>
 	<subtitle format="srt" id="por" title="Portuguese">./media/subtitles/problema_portuguese.srt</subtitle>  
+	<subtitle format="srt" id="rus" title="Russian" fontName="Arial" fontFile="./media/swf/font-cyrillic.swf" fontSize="18">./media/subtitles/problema_russian.srt</subtitle>
 	<subtitle format="srt" id="esp" title="Spanish">./media/subtitles/problema_spanish.srt</subtitle> 
-	<subtitle format="srt" id="test" title="Example">./media/subtitles/example.srt</subtitle> 
+	<subtitle format="" id="none" title="No subtitles"></subtitle> 
 </subtitles>

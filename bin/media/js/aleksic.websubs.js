@@ -329,6 +329,7 @@ var aleksic;
 		 * Each subtitle line is represented by an object: {id, start, end, text}
 		 * TODO: amend the function as it is from the old version
 		 * @param {String} The contents of a .srt file 
+		 * @return {Array} An array containing an {start,end,text} object for each subtitle line
 		 */
 		parseSrt: function(string) { 
 			var result = [],

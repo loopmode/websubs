@@ -5,8 +5,11 @@ package org.mindpirates.video.subs.view
 	import embed.fonts.EmbeddedFonts;
 	
 	import flash.display.Sprite;
+	import flash.display.StageDisplayState;
 	import flash.events.Event;
+	import flash.events.FullScreenEvent;
 	import flash.filters.DropShadowFilter;
+	import flash.media.Video;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
@@ -160,7 +163,7 @@ package org.mindpirates.video.subs.view
 			var format:TextFormat = new TextFormat();
 			format.size = 8;
 			format.font = EmbeddedFonts.UNI_05_53;
-			format.color = 0xFFFFFF; 
+			format.color = 0xffffff; 
 			format.align = TextFormatAlign.LEFT;
 			_statusTextField.embedFonts = true;
 			_statusTextField.selectable = false;
@@ -168,8 +171,10 @@ package org.mindpirates.video.subs.view
 			_statusTextField.filters = [new DropShadowFilter(4,45,0,0.5)];
 			_statusTextField.defaultTextFormat = format;
 			_statusTextField.autoSize = TextFieldAutoSize.LEFT;
-			_statusTextField.x = 5;
-			_statusTextField.y = 5;
+			//_statusTextField.x = ui.comboBox.x + ui.comboBox.width + 5;
+			//_statusTextField.y = stage.stageHeight - 5 - _statusTextField.height;
+			_statusTextField.x = 2;
+			_statusTextField.y = stage.stageHeight - _statusTextField.height - 2;
 			addChild(_statusTextField); 
 		}
 		
@@ -223,6 +228,7 @@ package org.mindpirates.video.subs.view
 		{
 			subs.main.addEventListener(SubtitleEvent.LINE_CHANGED, handleSubtitleLineChanged);
 			stage.addEventListener(Event.RESIZE, handleStageResize); 
+			stage.addEventListener(FullScreenEvent.FULL_SCREEN, handleFullscreenChange);
 			addEventListener(Event.REMOVED_FROM_STAGE, handleRemoved);
 		}
 			
@@ -259,15 +265,43 @@ package org.mindpirates.video.subs.view
 			layout();
 		}
 		
+		public function handleFullscreenChange(event:FullScreenEvent):void
+		{
+			layout();
+		}
+		
 		public function layout():void
 		{
-			subtitlesTextField.scaleX = subtitlesTextField.scaleY = subs.main.currentScale;
-			subtitlesTextField.width = stage.stageWidth - 20; 
+			var tf:TextField = subtitlesTextField;
+			var tfStat:TextField = _statusTextField;
 			
-			//var fontSize:Number = subs.main.currentScale * (subs.currentFile && subs.currentFile.fontSize ? subs.currentFile.fontSize : subs.main.flashVars.defaultFontSize);
-			subtitlesTextField.x = 0.5 * (stage.stageWidth - subtitlesTextField.width);
-			subtitlesTextField.y =  stage.stageHeight - subtitlesTextField.height - subs.main.flashVars.textfieldMarginBottom;
+			if (tf) {
+				tf.scaleX = tf.scaleY = subs.main.currentScale;
+				tf.width =  stage.stageWidth - 20; 
+				/*
+				if (stage.displayState === StageDisplayState.NORMAL) {
+					tf.width =  stage.stageWidth - 20; 
+				}
+				else {
+					var videos:Array = subs.main.videoPlayer.findPlayerChildren(Video);					
+					if (videos.length) {
+						var video:Video = videos[0];
+						tf.width = video.width;
+					}
+				}
+				*/
+				
+				//var fontSize:Number = subs.main.currentScale * (subs.currentFile && subs.currentFile.fontSize ? subs.currentFile.fontSize : subs.main.flashVars.defaultFontSize);
+				tf.x = 0.5 * (stage.stageWidth - subtitlesTextField.width);
+				tf.y =  stage.stageHeight - tf.height - subs.main.flashVars.textfieldMarginBottom;
+			}
+			if (tfStat) {
+				tfStat.x = 2;
+				tfStat.y = stage.stageHeight - tfStat.height - 2;
+			}
 		}
+		
+		
 		
 	}
 }

@@ -13,6 +13,11 @@ package org.mindpirates.video.events
 		 */
 		public static const LINE_CHANGED:String = "lineChanged";
 		
+		/**
+		 * Dispatched when the subtitle text line is cleared
+		 */
+		public static const LINE_CLEARED:String = "lineCleared";
+		
 		
 		/**
 		 * Dispatched when a subtitle file begins loading
