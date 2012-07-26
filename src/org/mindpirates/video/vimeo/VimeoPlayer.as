@@ -119,6 +119,7 @@ package org.mindpirates.video.vimeo
 		 */
 		override internal function loadProgressHandler(event:Event):void
 		{
+			trace(this, 'loadProgressHandler()', event);
 			if (api_version == 2) dispatchEvent( createVideoPlayerEvent( VideoPlayerEvent.LOAD_PROGRESS, event ) );
 		}
 		
@@ -129,6 +130,8 @@ package org.mindpirates.video.vimeo
 		 */
 		override internal function onLoadingHandler(event:Event):void
 		{
+			
+			trace(this, 'onLoadingHandler()', event);
 			if (api_version == 1) dispatchEvent( createVideoPlayerEvent( VideoPlayerEvent.LOAD_PROGRESS, event ) );
 		}
 

@@ -161,14 +161,39 @@ package org.mindpirates.video.vimeo
 		
 		private function onComplete(e:Event) : void
 		{
+			
+			trace(this , 'onComplete');
+			
+			
 			// Finished loading moogaloop
 			container.addChild(e.currentTarget.loader.content);
 			moogaloop = e.currentTarget.loader.content;
 			moogaloop.addEventListener(READY, readyHandler, false, 0, true);
 			
 			
-			trace(this , 'onComplete');
 			
+			if (api_version == 2)
+			{
+				// API v2 Event Handlers
+				moogaloop.addEventListener(PLAY, playHandler, false, 0, true);
+				moogaloop.addEventListener(PAUSE, pauseHandler, false, 0, true);
+				moogaloop.addEventListener(SEEK, seekHandler, false, 0, true);
+				moogaloop.addEventListener(LOAD_PROGRESS, loadProgressHandler, false, 0, true);
+				moogaloop.addEventListener(PLAY_PROGRESS, playProgressHandler, false, 0, true);
+				moogaloop.addEventListener(FINISH, finishHandler, false, 0, true);
+				trace('api v2 handlers attached')
+			}
+			else
+			{
+				// API v1 Event Handlers
+				moogaloop.addEventListener(ON_PLAY, onPlayHandler, false, 0, true);
+				moogaloop.addEventListener(ON_PAUSE, onPauseHandler, false, 0, true);
+				moogaloop.addEventListener(ON_SEEK, onSeekHandler, false, 0, true);
+				moogaloop.addEventListener(ON_LOADING, onLoadingHandler, false, 0, true);
+				moogaloop.addEventListener(ON_PROGRESS, onProgressHandler, false, 0, true);
+				moogaloop.addEventListener(ON_FINISH, onFinishHandler, false, 0, true);
+				trace('api v1 handlers attached')
+			}
 			
 			// Create the mask for moogaloop
 			this.addChild(player_mask);
@@ -192,28 +217,6 @@ package org.mindpirates.video.vimeo
 				load_timer.stop();
 				load_timer.removeEventListener(TimerEvent.TIMER, playerLoadedCheck);
 				
-				if (api_version == 2)
-				{
-					// API v2 Event Handlers
-					moogaloop.addEventListener(PLAY, playHandler, false, 0, true);
-					moogaloop.addEventListener(PAUSE, pauseHandler, false, 0, true);
-					moogaloop.addEventListener(SEEK, seekHandler, false, 0, true);
-					moogaloop.addEventListener(LOAD_PROGRESS, loadProgressHandler, false, 0, true);
-					moogaloop.addEventListener(PLAY_PROGRESS, playProgressHandler, false, 0, true);
-					moogaloop.addEventListener(FINISH, finishHandler, false, 0, true);
-					trace('api v2 handlers attached')
-				}
-				else
-				{
-					// API v1 Event Handlers
-					moogaloop.addEventListener(ON_PLAY, onPlayHandler, false, 0, true);
-					moogaloop.addEventListener(ON_PAUSE, onPauseHandler, false, 0, true);
-					moogaloop.addEventListener(ON_SEEK, onSeekHandler, false, 0, true);
-					moogaloop.addEventListener(ON_LOADING, onLoadingHandler, false, 0, true);
-					moogaloop.addEventListener(ON_PROGRESS, onProgressHandler, false, 0, true);
-					moogaloop.addEventListener(ON_FINISH, onFinishHandler, false, 0, true);
-					trace('api v1 handlers attached')
-				}
 				
 				// remove moogaloop's mouse listeners listener
 				moogaloop.disableMouseMove();
