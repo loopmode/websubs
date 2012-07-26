@@ -16,6 +16,7 @@ package org.mindpirates.video.vimeo
 	import flash.utils.describeType;
 	
 	import org.mindpirates.video.VideoPlayerBase;
+	import org.mindpirates.video.events.VideoPlayerEvent;
 	
 	/**
 	 * <h3>VimeoPlayerBase</h3>
@@ -120,6 +121,7 @@ package org.mindpirates.video.vimeo
 		
 		override public function destroy() : void
 		{
+			trace(this, 'destroy()');
 			if (api_version == 2)
 			{
 				// API v2 Event Handlers
@@ -162,28 +164,11 @@ package org.mindpirates.video.vimeo
 			// Finished loading moogaloop
 			container.addChild(e.currentTarget.loader.content);
 			moogaloop = e.currentTarget.loader.content;
-			trace('api_version', api_version);
-			if (api_version == 2)
-			{
-				// API v2 Event Handlers
-				moogaloop.addEventListener(READY, readyHandler, false, 0, true);
-				moogaloop.addEventListener(PLAY, playHandler, false, 0, true);
-				moogaloop.addEventListener(PAUSE, pauseHandler, false, 0, true);
-				moogaloop.addEventListener(SEEK, seekHandler, false, 0, true);
-				moogaloop.addEventListener(LOAD_PROGRESS, loadProgressHandler, false, 0, true);
-				moogaloop.addEventListener(PLAY_PROGRESS, playProgressHandler, false, 0, true);
-				moogaloop.addEventListener(FINISH, finishHandler, false, 0, true);
-			}
-			else
-			{
-				// API v1 Event Handlers
-				moogaloop.addEventListener(ON_PLAY, onPlayHandler, false, 0, true);
-				moogaloop.addEventListener(ON_PAUSE, onPauseHandler, false, 0, true);
-				moogaloop.addEventListener(ON_SEEK, onSeekHandler, false, 0, true);
-				moogaloop.addEventListener(ON_LOADING, onLoadingHandler, false, 0, true);
-				moogaloop.addEventListener(ON_PROGRESS, onProgressHandler, false, 0, true);
-				moogaloop.addEventListener(ON_FINISH, onFinishHandler, false, 0, true);
-			}
+			moogaloop.addEventListener(READY, readyHandler, false, 0, true);
+			
+			
+			trace(this , 'onComplete');
+			
 			
 			// Create the mask for moogaloop
 			this.addChild(player_mask);
@@ -207,6 +192,29 @@ package org.mindpirates.video.vimeo
 				load_timer.stop();
 				load_timer.removeEventListener(TimerEvent.TIMER, playerLoadedCheck);
 				
+				if (api_version == 2)
+				{
+					// API v2 Event Handlers
+					moogaloop.addEventListener(PLAY, playHandler, false, 0, true);
+					moogaloop.addEventListener(PAUSE, pauseHandler, false, 0, true);
+					moogaloop.addEventListener(SEEK, seekHandler, false, 0, true);
+					moogaloop.addEventListener(LOAD_PROGRESS, loadProgressHandler, false, 0, true);
+					moogaloop.addEventListener(PLAY_PROGRESS, playProgressHandler, false, 0, true);
+					moogaloop.addEventListener(FINISH, finishHandler, false, 0, true);
+					trace('api v2 handlers attached')
+				}
+				else
+				{
+					// API v1 Event Handlers
+					moogaloop.addEventListener(ON_PLAY, onPlayHandler, false, 0, true);
+					moogaloop.addEventListener(ON_PAUSE, onPauseHandler, false, 0, true);
+					moogaloop.addEventListener(ON_SEEK, onSeekHandler, false, 0, true);
+					moogaloop.addEventListener(ON_LOADING, onLoadingHandler, false, 0, true);
+					moogaloop.addEventListener(ON_PROGRESS, onProgressHandler, false, 0, true);
+					moogaloop.addEventListener(ON_FINISH, onFinishHandler, false, 0, true);
+					trace('api v1 handlers attached')
+				}
+				
 				// remove moogaloop's mouse listeners listener
 				moogaloop.disableMouseMove();
 				if (stage)
@@ -224,6 +232,7 @@ package org.mindpirates.video.vimeo
 		 */
 		internal function playerLoaded():void
 		{
+			//dispatchEvent(createVideoPlayerEvent(VideoPlayerEvent.PLAYER_READY));
 			dispatchEvent(new Event(Event.COMPLETE));
 		}
 		  
@@ -371,7 +380,8 @@ package org.mindpirates.video.vimeo
 		 */
 		internal function readyHandler(event:Event) : void
 		{
-			trace('readyHandler');
+			trace(this, 'readyHandler()');
+			dispatchEvent( createVideoPlayerEvent( VideoPlayerEvent.VIDEO_READY, event ) );
 		}
 		
 		/**

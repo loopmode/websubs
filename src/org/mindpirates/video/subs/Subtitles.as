@@ -485,6 +485,7 @@ package org.mindpirates.video.subs
 		 */
 		private function addPlayerEvents():void
 		{
+			trace(this, 'addPlayerEvents()');
 			main.videoPlayer.addEventListener(VideoPlayerEvent.PLAYER_READY, handlePlayerReady);
 			main.videoPlayer.addEventListener(VideoPlayerEvent.PLAY, handlePlayVideo);
 			main.videoPlayer.addEventListener(VideoPlayerEvent.PAUSE, handlePauseVideo);
@@ -498,6 +499,7 @@ package org.mindpirates.video.subs
 		 */
 		private function removePlayerEvents():void
 		{
+			trace(this, 'removePlayerEvents()');
 			main.videoPlayer.removeEventListener(VideoPlayerEvent.PLAYER_READY, handlePlayerReady);
 			main.videoPlayer.removeEventListener(VideoPlayerEvent.PLAY, handlePlayVideo);
 			main.videoPlayer.removeEventListener(VideoPlayerEvent.PAUSE, handlePauseVideo);
@@ -507,6 +509,7 @@ package org.mindpirates.video.subs
 		
 		protected function handlePlayerReady(event:Event):void
 		{
+			trace(this, 'handlePlayerReady()', event, event.target);
 			main.videoPlayer.removeEventListener(VideoPlayerEvent.PLAYER_READY, handlePlayerReady);
 			if (_currentFile && timer && !timer.running) {
 				timer.start();
@@ -515,6 +518,7 @@ package org.mindpirates.video.subs
 		
 		protected function handlePlayVideo(event:Event):void
 		{
+			trace(this, 'handlePlayVideo()');
 			if (_currentFile) {
 				timer.start();
 				updateSubtitleLine();
@@ -523,16 +527,19 @@ package org.mindpirates.video.subs
 		
 		protected function handlePauseVideo(event:Event):void
 		{
+			trace(this, 'handlePauseVideo()');
 			timer.stop();
 		}
 		
 		protected function handleStopVideo(event:Event):void
 		{
+			trace(this, 'handleStopVideo()');
 			timer.stop();
 		}
 		
 		protected function handleSeekVideo(event:Event):void
 		{
+			trace(this, 'handleSeekVideo()');
 			updateSubtitleLine();			
 		}
 		

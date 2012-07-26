@@ -148,6 +148,7 @@ package org.mindpirates.video.subs.view
 		
 		public function handlePlayerReady(event:Event):void
 		{
+			trace(this, 'handlePlayerReady()');
 			subs.main.videoPlayer.removeEventListener(VideoPlayerEvent.PLAYER_READY, handlePlayerReady);
 			addEventListener(Event.ENTER_FRAME, handleEnterFrame);
 			visible = true;

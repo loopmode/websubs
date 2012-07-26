@@ -2,6 +2,7 @@ package org.mindpirates.video
 {
 	import flash.display.DisplayObject;
 	import flash.events.IEventDispatcher;
+	import flash.net.NetStream;
 	
 	/**
 	 * The IVideoPlayer interface defines common functions to be implemented by videoplayer clases. 
@@ -104,5 +105,10 @@ package org.mindpirates.video
 		 * Whether playback is currently paused.
 		 */
 		function get isPaused():Boolean;
+		
+		/**
+		 * Returns the NetStream instance of the player
+		 */
+		//function get netstream():NetStream;
 	}
 }

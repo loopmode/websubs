@@ -33,8 +33,7 @@ package org.mindpirates.video.vimeo
 			var fp_version:String 		= '11';
 			videoPlayer = new VimeoPlayer(oauth, clip_id, w, h, fp_version);
 			videoPlayer.addEventListener(VideoPlayerEvent.PLAYER_READY, handlePlayerReady);
-			addChild(videoPlayer.displayObject);
-			super.createPlayer();
+			addChild(videoPlayer.displayObject); 
 		}
 		 
 	}

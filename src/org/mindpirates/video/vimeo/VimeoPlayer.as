@@ -54,6 +54,7 @@ package org.mindpirates.video.vimeo
 		public function VimeoPlayer(oauth_key:String, clip_id:String, w:int, h:int, fp_version:String='10', api_version:int=2)
 		{
 			super(oauth_key, int(clip_id), w, h, fp_version, api_version);
+			
 		}
 		
 		
@@ -81,6 +82,7 @@ package org.mindpirates.video.vimeo
 			var e:VideoPlayerEvent =  new VideoPlayerEvent( VideoPlayerEvent.ERROR );
 			e.originalEvent = event;
 			dispatchEvent( e );
+			trace(this, 'ERROR', event);
 		}
 		
 		
@@ -90,21 +92,14 @@ package org.mindpirates.video.vimeo
 		 */
 		override internal function playerLoaded():void
 		{
+			trace(this, 'playerLoaded()');
 			_ui = new VimeoPlayerUI( moogaloop as Sprite );
 			_isReady = true;
 			dispatchEvent( createVideoPlayerEvent( VideoPlayerEvent.PLAYER_READY ) ); 			
 		}
 	 
 		
-		/**
-		 * 
-		 * Moogaloop API v2 Event Handler for READY
-		 * @copy org.mindpirates.video.vimeo.VimeoPlayerBase.readyHandler()
-		 */
-		override internal function readyHandler(event:Event):void
-		{
-			dispatchEvent( createVideoPlayerEvent( VideoPlayerEvent.VIDEO_READY, event ) );
-		}
+	 
 		
 		override public function load(id:String):void
 		{
@@ -150,6 +145,7 @@ package org.mindpirates.video.vimeo
 		 */
 		override internal function playHandler(event:Event):void
 		{
+			trace(this, 'playHandler()');
 			if (api_version == 2) dispatchEvent( createVideoPlayerEvent( VideoPlayerEvent.PLAY, event ));
 		}
 		
@@ -159,6 +155,7 @@ package org.mindpirates.video.vimeo
 		 */
 		override internal function onPlayHandler(event:Event):void
 		{
+			trace(this, 'onPlayHandler()');
 			if (api_version == 1) dispatchEvent(createVideoPlayerEvent( VideoPlayerEvent.PLAY, event ));
 		}
 		
@@ -168,6 +165,7 @@ package org.mindpirates.video.vimeo
 		 */
 		override internal function onProgressHandler(event:Event):void
 		{
+			trace(this, 'onProgressHandler', event);
 			if (api_version == 1) dispatchEvent(createVideoPlayerEvent( VideoPlayerEvent.PLAY_PROGRESS, event ));
 		}
 		
@@ -178,7 +176,7 @@ package org.mindpirates.video.vimeo
 		 */
 		override internal function playProgressHandler(event:Event):void
 		{
-			trace('playback', event);
+			trace(this, 'playProgressHandler', event);
 			if (api_version == 2) dispatchEvent( createVideoPlayerEvent( VideoPlayerEvent.PLAY_PROGRESS, event ));
 		}
 		
@@ -196,6 +194,7 @@ package org.mindpirates.video.vimeo
 		 */
 		override internal function pauseHandler(event:Event):void
 		{
+			trace(this, 'pauseHandler()', event);
 			if (api_version == 2) dispatchEvent(createVideoPlayerEvent( VideoPlayerEvent.PAUSE, event ));
 		}
 		
@@ -206,6 +205,7 @@ package org.mindpirates.video.vimeo
 		 */
 		override internal function onPauseHandler(event:Event):void
 		{
+			trace(this, 'onPauseHandler()', event);
 			if (api_version == 1) dispatchEvent(createVideoPlayerEvent( VideoPlayerEvent.PAUSE, event ));
 		}
 		 
@@ -235,6 +235,7 @@ package org.mindpirates.video.vimeo
 		 */
 		override internal function seekHandler(event:Event):void
 		{
+			trace(this, 'seekHandler()', event);
 			if (api_version == 2) dispatchEvent(createVideoPlayerEvent( VideoPlayerEvent.SEEK, event ));
 		}
 		
@@ -245,6 +246,7 @@ package org.mindpirates.video.vimeo
 		 */
 		override internal function onSeekHandler(event:Event):void
 		{
+			trace(this, 'onSeekHandler()', event);
 			if (api_version == 1) dispatchEvent(createVideoPlayerEvent( VideoPlayerEvent.SEEK, event ));
 		}
 		

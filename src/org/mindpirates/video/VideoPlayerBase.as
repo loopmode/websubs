@@ -5,6 +5,7 @@ package org.mindpirates.video
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.external.ExternalInterface;
+	import flash.net.NetStream;
 	
 	import org.mindpirates.video.events.VideoPlayerEvent;
 	
@@ -128,6 +129,13 @@ package org.mindpirates.video
 			// must be implemented by derived classes
 			throw new Error('function get player() not implemented');
 			return null;
+		}
+		
+		public function get netstream():NetStream
+		{
+			var arr:Array = findPlayerChildren(NetStream);
+			var ns:NetStream = arr[0];
+			return ns;
 		}
 		
 		/**
@@ -324,11 +332,13 @@ package org.mindpirates.video
 		
 		public function findNestedChildren(container:DisplayObjectContainer, childClass:Class):Array 
 		{ 
+			//trace('findNestedChildren', container, childClass);
 			var result:Array = [];
 			var child:DisplayObject; 
 			for (var i:uint=0; i < container.numChildren; i++) 
 			{ 
 				child = container.getChildAt(i);
+				//trace('current child: ', child, typeof child);
 				if (child is childClass) {
 					result.push(child);
 				}
