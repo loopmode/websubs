@@ -90,7 +90,7 @@ package org.mindpirates.video.subs
 		 */
 		public function get subtitlesList():String
 		{
-			return String(data['subtitles_list']);
+			return data['subtitles_list'] ? String(data['subtitles_list']) : undefined;
 		}
 		
 		/**
@@ -109,6 +109,11 @@ package org.mindpirates.video.subs
 		public function get autoPlay():Boolean
 		{
 			return data['autoplay'] === 'true' || data['autoplay'] === '1' ||  data['autoplay'] === true || data['autoplay'] === 1;
+		}
+		
+		public function get readyCallback():String
+		{
+			return data['readyCallback'];
 		}
 	}
 }
