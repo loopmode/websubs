@@ -5,11 +5,10 @@ package org.mindpirates.video.subs {
 	 */
 	public class SubtitleParser {
 		public static function parseSRT(data : String) : Array {
+			data = data.replace(/\s*\R/g, "\n");  
 			var result : Array = new Array();
-			
 			var lines : Array;
 			var subtitleLine : SubtitleLine;
-			
 			var blocks : Array = data.split(/^[0-9]+$/gm);
 			for each (var block : String in blocks) {
 				subtitleLine = new SubtitleLine();
