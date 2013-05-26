@@ -96,7 +96,7 @@ package org.mindpirates.video
 		private function initJS():void
 		{
 			if (ExternalInterface.available) {
-				ExternalInterface.addCallback('play', this.play);
+				ExternalInterface.addCallback('startPlayback', this.play);
 				ExternalInterface.addCallback('stop', this.stop);
 				ExternalInterface.addCallback('pause', this.pause);
 				ExternalInterface.addCallback('seekTo', this.seekToTime); 
