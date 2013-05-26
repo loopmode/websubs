@@ -2,18 +2,12 @@ package org.mindpirates.video.subs
 {
 	import embed.fonts.EmbeddedFonts;
 	
-	import flash.display.DisplayObjectContainer;
-	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.TimerEvent;
 	import flash.external.ExternalInterface;
-	import flash.media.Video;
-	import flash.net.URLLoader;
 	import flash.net.URLRequest;
-	import flash.text.Font;
 	import flash.utils.Timer;
 	
-	import org.mindpirates.video.VideoPlayerBase;
 	import org.mindpirates.video.events.SubtitleEvent;
 	import org.mindpirates.video.events.SubtitleFileLoaderEvent;
 	import org.mindpirates.video.events.SubtitleListLoaderEvent;
@@ -21,9 +15,7 @@ package org.mindpirates.video.subs
 	import org.mindpirates.video.subs.loading.SubsListLoader;
 	import org.mindpirates.video.subs.loading.SubtitleFileLoader;
 	import org.mindpirates.video.subs.view.SubtitleTextField;
-	import org.mindpirates.video.subs.view.SubtitlesUI;
 	import org.mindpirates.video.subs.view.SubtitlesView;
-	import org.mindpirates.video.vimeo.VimeoSubtitlesUI;
 	
 	import utils.StringUtils;
 	 
@@ -330,11 +322,11 @@ package org.mindpirates.video.subs
 		
 		/**
 		 * Attempts to load the default subtitle file. This can be overridden via flashvars:
-		 * <ul>
-		 * <li>1. if a 'subtitles' property was specified in the flashvars, and the value corresponds to either the ID or URL of an item in the XML list, that file will be used.</li>
-		 * <li>2. if no file was determined based on the flashvars, the file specified by the "default_id" attribute of the root node in the XML list will be used.</li>
-		 * <li>3. if both previous attempts fail, and the XML list contains at least one item, the file specified by the first XML item will be used.</li>
-		 * </ul>
+		 * <ol>
+		 * <li>if a 'subtitles' property was specified in the flashvars, and the value corresponds to either the ID or URL of an item in the XML list, that file will be used.</li>
+		 * <li>if no file was determined based on the flashvars, the file specified by the "default_id" attribute of the root node in the XML list will be used.</li>
+		 * <li>if both previous attempts fail, and the XML list contains at least one item, the file specified by the first XML item will be used.</li>
+		 * </ol>
 		 * If no file could be determined, a message is displayed via trace(). Otherwise the determined file will be loaded.
 		 */
 		private function loadDefaultSubtitles():void

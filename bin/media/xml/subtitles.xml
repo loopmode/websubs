@@ -1,5 +1,5 @@
 <?xml version="1.0" standalone="yes" ?>
-<subtitles default_id="ger">
+<subtitles default_id="def">
 	<subtitle format="srt" id="def" title="Standard" description="English (Only while other languages are spoken)">./media/subtitles/problema_english_basic.srt</subtitle>  
 	<subtitle format="srt" id="arb" title="Arabic" fontName="Adobe Arabic" fontFile="./media/swf/font-arabic.swf" fontSize="30">./media/subtitles/problema_arabic.srt</subtitle>
 	<subtitle format="srt" id="chn" title="Chinese" fontName="Bitstream Cyberbit" fontFile="./media/swf/font-chinese.swf" fontSize="22">./media/subtitles/problema_chinese.srt</subtitle>

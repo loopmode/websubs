@@ -33,12 +33,14 @@ package org.mindpirates.video.subs.view
 		
 		public function destroy():void
 		{
-			_file.removeEventListener(SubtitleFileLoaderEvent.LOAD, showLoadingSubtitlesMessage);
-			_file.removeEventListener(SubtitleFileLoaderEvent.PROGRESS, showLoadingSubtitlesMessage);
-			_file.removeEventListener(SubtitleFileLoaderEvent.FONT_LOAD, showLoadingFontMessage);
-			_file.removeEventListener(SubtitleFileLoaderEvent.FONT_PROGRESS, showLoadingFontMessage);
-			_file.removeEventListener(SubtitleFileLoaderEvent.FONT_COMPLETE, showCompleteMessage);
-			_file.removeEventListener(SubtitleFileLoaderEvent.COMPLETE, showCompleteMessage); 
+			if (_file) {
+				_file.removeEventListener(SubtitleFileLoaderEvent.LOAD, showLoadingSubtitlesMessage);
+				_file.removeEventListener(SubtitleFileLoaderEvent.PROGRESS, showLoadingSubtitlesMessage);
+				_file.removeEventListener(SubtitleFileLoaderEvent.FONT_LOAD, showLoadingFontMessage);
+				_file.removeEventListener(SubtitleFileLoaderEvent.FONT_PROGRESS, showLoadingFontMessage);
+				_file.removeEventListener(SubtitleFileLoaderEvent.FONT_COMPLETE, showCompleteMessage);
+				_file.removeEventListener(SubtitleFileLoaderEvent.COMPLETE, showCompleteMessage);
+			}
 			_file = null;
 		}
 		 
