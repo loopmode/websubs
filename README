@@ -8,3 +8,6 @@ Youtube and other subtitle formats will be implemented in the future.
 A jQuery plugin for simple usage is included. 
 
 A solution for the non-Flash, HTML5 video embed from vimeo.com is prepared in the file aleksic.websubs.js and needs to be implemented into websubs.js.
+
+
+Developed for and used on: http://www.problema-thefilm.org
