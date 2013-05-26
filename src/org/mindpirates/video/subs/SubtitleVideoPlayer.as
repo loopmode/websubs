@@ -4,14 +4,13 @@ package org.mindpirates.video.subs
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
+	import flash.external.ExternalInterface;
 	import flash.geom.Point;
 	
 	import net.stevensacks.preloaders.CircleSlicePreloader;
 	
 	import org.mindpirates.video.VideoPlayerBase;
 	import org.mindpirates.video.events.VideoPlayerEvent;
-	import org.mindpirates.video.vimeo.VimeoAuth;
-	import org.mindpirates.video.vimeo.VimeoPlayer;
 	
 	
 	/**
@@ -122,6 +121,9 @@ package org.mindpirates.video.subs
 			createPlayer();
 			createSubtitles();
 			addListeners();
+			if (flashVars.readyCallback && ExternalInterface.available) {
+				ExternalInterface.call(flashVars.readyCallback);
+			}
 		}
 		
 		
